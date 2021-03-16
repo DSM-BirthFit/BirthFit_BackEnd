@@ -4,14 +4,14 @@ import com.birth.fit.domain.entity.User
 
 class JoinRequest(
     val email: String,
-    val id: String,
-    val password: String
+    var userId: String,
+    var password: String
 ) {
-    fun getData(): User {
+    fun getData(joinRequest: JoinRequest): User {
         return User(
-            email = email,
-            id = id,
-            password = password
+            joinRequest.email,
+            joinRequest.userId,
+            joinRequest.password
         )
     }
 }

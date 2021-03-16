@@ -5,17 +5,19 @@ import javax.persistence.*
 @Entity
 @Table(name = "user")
 class User(
+
     @Id
+    @Column(name = "email")
     var email: String,
 
-    @Column(name = "id")
-    var id: String,
+    @Column(name = "user_id")
+    var userId: String,
 
     @Column(name = "password")
     var password: String
     ) {
-    fun update(id: String, password: String) {
-        this.id = id
+    fun update(userId: String, password: String) {
+        this.userId = userId
         this.password = password
     }
 
