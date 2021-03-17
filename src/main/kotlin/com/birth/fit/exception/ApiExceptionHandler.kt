@@ -1,6 +1,8 @@
 package com.birth.fit.exception
 
 import com.birth.fit.exception.error.AuthorizationException
+import com.birth.fit.exception.error.InvalidAuthCodeException
+import com.birth.fit.exception.error.InvalidAuthEmailException
 import com.birth.fit.exception.error.LoginFailedException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,6 +13,14 @@ import java.util.*
 
 @ControllerAdvice
 class ApiExceptionHandler {
+
+    @ExceptionHandler(
+        InvalidAuthEmailException::class,
+        InvalidAuthCodeException::class
+    )
+    fun badRequestException(e: Exception): ResponseEntity<ErrorResponse> {
+        return generateErrorResponse(HttpStatus.BAD_REQUEST, e.message!!)
+    }
 
     @ExceptionHandler(AuthenticationException::class)
     fun forbiddenException(e: Exception): ResponseEntity<ErrorResponse> {
