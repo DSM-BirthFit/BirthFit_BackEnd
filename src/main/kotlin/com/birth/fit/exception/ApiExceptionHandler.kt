@@ -1,9 +1,6 @@
 package com.birth.fit.exception
 
-import com.birth.fit.exception.error.AuthorizationException
-import com.birth.fit.exception.error.InvalidAuthCodeException
-import com.birth.fit.exception.error.InvalidAuthEmailException
-import com.birth.fit.exception.error.LoginFailedException
+import com.birth.fit.exception.error.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.AuthenticationException
@@ -35,6 +32,11 @@ class ApiExceptionHandler {
     @ExceptionHandler(AuthorizationException::class)
     fun unauthorizedException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.FORBIDDEN, e.message!!)
+    }
+
+    @ExceptionHandler(UserAlreadyExistException::class)
+    fun duplicateException(e: Exception): ResponseEntity<ErrorResponse> {
+        return generateErrorResponse(HttpStatus.CONFLICT, e.message!!)
     }
 
     @ExceptionHandler(Exception::class)
