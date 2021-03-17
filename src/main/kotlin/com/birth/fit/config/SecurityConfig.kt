@@ -31,6 +31,7 @@ class SecurityConfig(
             .csrf().disable()
             .authorizeRequests()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/email/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .apply(JwtConfig(jwtTokenProvider))
