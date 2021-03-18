@@ -32,6 +32,7 @@ class SecurityConfig(
             .authorizeRequests()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/email/**").permitAll()
+                .antMatchers("/help/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .apply(JwtConfig(jwtTokenProvider))
