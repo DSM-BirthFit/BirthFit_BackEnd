@@ -34,7 +34,10 @@ class ApiExceptionHandler {
         return generateErrorResponse(HttpStatus.FORBIDDEN, e.message!!)
     }
 
-    @ExceptionHandler(UserNotFoundException::class)
+    @ExceptionHandler(
+        UserNotFoundException::class,
+        PostNotFoundException::class
+    )
     fun notFoundException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.NOT_FOUND, e.message!!)
     }
