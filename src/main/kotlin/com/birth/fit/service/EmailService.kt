@@ -11,23 +11,21 @@ import com.birth.fit.exception.error.InvalidAuthEmailException
 import com.birth.fit.exception.error.UserAlreadyExistException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
-import java.util.*
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.Async
-import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service
 class EmailService(
+    @Value("\${spring.mail.username}")
+    val adminEmail: String,
     @Autowired val userRepository: UserRepository,
     @Autowired val emailRepository: EmailRepository,
     @Autowired val javaMailSender: JavaMailSender
 ) {
-
-    @Value("\${spring.mail.username}")
-    private val adminEmail: String? = null
 
     fun sendCode(email: String) {
         val user: User? = userRepository.findByEmail(email)
@@ -50,7 +48,8 @@ class EmailService(
         val email:  String = request.email
         val code: String = request.code
 
-        val data: Email = emailRepository.findById(email).orElseThrow {
+        val data: Email = emailRepository.findById(email)
+            .orElseThrow {
                 InvalidAuthEmailException("This email did not request authentication.")
             }
 
@@ -62,7 +61,7 @@ class EmailService(
     @Async
     fun sendEmail(email: String?, code: String) {
         val mailMessage = SimpleMailMessage()
-        mailMessage.setFrom(adminEmail!!)
+        mailMessage.setFrom(adminEmail)
         mailMessage.setTo(email)
         mailMessage.setSubject("BirthFit 이메일 인증입니다.")
         mailMessage.setText("계정 인증을 위한 코드는 " + code + "입니다.")
