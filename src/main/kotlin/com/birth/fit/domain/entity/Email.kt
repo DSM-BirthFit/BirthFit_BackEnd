@@ -7,14 +7,15 @@ import org.springframework.data.redis.core.TimeToLive
 
 @RedisHash(timeToLive = 60 * 3)
 class Email(
-
-    @Id var email: String,
+    @Id
+    var email: String,
     var code: String,
-    var status: EmailVerificationStatus
-) {
+    var status: EmailVerificationStatus,
+
     @TimeToLive
-    var ttl: Long? = 0
+    var ttl: Long? = 0,
     val MINUTE: Long = 60L
+) {
 
     fun verify(): Email {
         status = EmailVerificationStatus.VERIFIED
