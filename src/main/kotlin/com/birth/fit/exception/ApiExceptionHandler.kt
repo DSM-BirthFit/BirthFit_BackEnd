@@ -3,7 +3,6 @@ package com.birth.fit.exception
 import com.birth.fit.exception.error.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.util.*
@@ -19,17 +18,15 @@ class ApiExceptionHandler {
         return generateErrorResponse(HttpStatus.BAD_REQUEST, e.message!!)
     }
 
-    @ExceptionHandler(AuthenticationException::class)
-    fun forbiddenException(e: Exception): ResponseEntity<ErrorResponse> {
-        return generateErrorResponse(HttpStatus.UNAUTHORIZED, "You are not allowed to do this operation")
-    }
-
-    @ExceptionHandler(LoginFailedException::class)
+    @ExceptionHandler(
+        LoginFailedException::class,
+        InvalidTokenException::class
+    )
     fun requestFailedException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.UNAUTHORIZED, e.message!!)
     }
 
-    @ExceptionHandler(AuthorizationException::class)
+    @ExceptionHandler(ExpiredTokenException::class)
     fun unauthorizedException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.FORBIDDEN, e.message!!)
     }
