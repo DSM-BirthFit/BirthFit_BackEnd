@@ -14,8 +14,11 @@ class User(
     var userId: String,
 
     @Column(name = "password")
-    var password: String
-    ) {
+    var password: String,
+
+    @OneToMany(mappedBy = "userEmail")
+    val help: List<Help>? = null
+) {
     fun update(userId: String, password: String) {
         this.userId = userId
         this.password = password
