@@ -1,15 +1,13 @@
 package com.birth.fit.controller
 
+import com.birth.fit.dto.ChangePasswordRequest
 import com.birth.fit.dto.JoinRequest
 import com.birth.fit.dto.LoginRequest
 import com.birth.fit.dto.TokenResponse
 import com.birth.fit.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")
@@ -25,5 +23,10 @@ class UserController(
     @PostMapping("/login")
     fun login(@RequestBody @Validated loginRequest: LoginRequest): TokenResponse {
         return userService.login(loginRequest)
+    }
+
+    @PutMapping("/password")
+    fun findPassword(@RequestBody @Validated changePasswordRequest: ChangePasswordRequest) {
+        userService.findPassword(changePasswordRequest)
     }
 }
