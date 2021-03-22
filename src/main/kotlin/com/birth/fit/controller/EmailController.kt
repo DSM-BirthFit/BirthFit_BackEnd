@@ -17,6 +17,11 @@ class EmailController(
         emailService.sendCode(email)
     }
 
+    @PostMapping("/password")
+    fun findPassword(@RequestParam email: String) {
+        emailService.findPassword(email)
+    }
+
     @PutMapping("/verify")
     fun verifyEmail(@RequestBody @Validated emailVerifyRequest: EmailVerifyRequest) {
         emailService.emailVerify(emailVerifyRequest)

@@ -9,6 +9,7 @@ import com.birth.fit.dto.EmailVerifyRequest
 import com.birth.fit.exception.error.InvalidAuthCodeException
 import com.birth.fit.exception.error.InvalidAuthEmailException
 import com.birth.fit.exception.error.UserAlreadyExistException
+import com.birth.fit.exception.error.UserNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
@@ -30,6 +31,23 @@ class EmailService(
     fun sendCode(email: String) {
         val user: User? = userRepository.findByEmail(email)
         user?.let { throw UserAlreadyExistException("This email already exists.") }
+
+        val code: String = randomCode()
+
+        this.sendEmail(email, code)
+
+        emailRepository.save(
+            Email(
+                email,
+                code,
+                EmailVerificationStatus.UNVERIFIED
+            )
+        )
+    }
+
+    fun findPassword(email: String) {
+        val user: User? = userRepository.findByEmail(email)
+        user?: throw UserNotFoundException("Unsubscribed email.")
 
         val code: String = randomCode()
 
