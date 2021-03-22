@@ -46,7 +46,7 @@ class ApiExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun internalServerErrorException(e: Exception): ResponseEntity<ErrorResponse> {
-        return generateErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Generic internal error")
+        return generateErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.message!!)
     }
 
     private fun generateErrorResponse(
