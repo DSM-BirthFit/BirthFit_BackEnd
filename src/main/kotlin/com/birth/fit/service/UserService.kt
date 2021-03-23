@@ -85,7 +85,7 @@ class UserService(
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
         user?: throw UserNotFoundException("User not found.")
 
-        if(user.userId != profileRequest.id) user.userId = profileRequest.id
+        if(user.userId != profileRequest.userId) user.userId = profileRequest.userId
         profileRequest.password?.let { user.password = profileRequest.password }
 
         userRepository.save(user)
