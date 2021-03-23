@@ -18,7 +18,7 @@ class HelpService(
     @Autowired val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    fun postHelp(bearerToken: String?, postRequest: PostRequest){
+    fun write(bearerToken: String?, postRequest: PostRequest){
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 

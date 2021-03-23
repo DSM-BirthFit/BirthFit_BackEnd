@@ -13,8 +13,8 @@ class HelpController(
 ) {
 
     @PostMapping
-    fun postHelp(@RequestHeader("Authorization") bearerToken: String?,
+    fun write(@RequestHeader("Authorization") bearerToken: String?,
                  @RequestBody @Validated postRequest: PostRequest) {
-        return helpService.postHelp(bearerToken, postRequest)
+        return helpService.write(bearerToken, postRequest)
     }
 }
