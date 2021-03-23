@@ -4,6 +4,7 @@ import com.birth.fit.domain.entity.Email
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.EmailRepository
 import com.birth.fit.domain.repository.UserRepository
+import com.birth.fit.dto.ChangePasswordRequest
 import com.birth.fit.dto.JoinRequest
 import com.birth.fit.dto.LoginRequest
 import com.birth.fit.dto.TokenResponse
@@ -49,5 +50,20 @@ class UserService(
         val refreshToken: String = jwtTokenProvider.createRefreshToken(username)
 
         return TokenResponse(accessToken, refreshToken, "Bearer")
+    }
+
+    fun findPassword(passwordRequest: ChangePasswordRequest) {
+        val email: String = passwordRequest.email
+        emailRepository.findById(email)
+            .filter(Email::isVerified)
+            .orElseThrow {
+                InvalidAuthEmailException("This email is not authenticated.")
+            }
+
+        val user: User? = userRepository.findByEmail(email)
+        user?: throw UserNotFoundException("This email is not subscribed to.")
+
+        user.password = aes256Util.aesEncode(passwordRequest.password)
+        userRepository.save(user)
     }
 }
