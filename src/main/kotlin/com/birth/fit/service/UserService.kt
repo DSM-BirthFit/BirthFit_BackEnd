@@ -4,10 +4,8 @@ import com.birth.fit.domain.entity.Email
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.EmailRepository
 import com.birth.fit.domain.repository.UserRepository
-import com.birth.fit.dto.ChangePasswordRequest
-import com.birth.fit.dto.JoinRequest
-import com.birth.fit.dto.LoginRequest
-import com.birth.fit.dto.TokenResponse
+import com.birth.fit.dto.*
+import com.birth.fit.exception.error.ExpiredTokenException
 import com.birth.fit.exception.error.InvalidAuthEmailException
 import com.birth.fit.exception.error.LoginFailedException
 import com.birth.fit.exception.error.UserNotFoundException
@@ -23,6 +21,19 @@ class UserService(
     @Autowired val jwtTokenProvider: JwtTokenProvider,
     @Autowired val aes256Util: AES256Util
 ) {
+
+    fun getProfile(bearerToken: String): ProfileResponse {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        return ProfileResponse(
+            user.email,
+            user.userId
+        )
+    }
 
     fun join(joinRequest: JoinRequest) {
         emailRepository.findById(joinRequest.email)

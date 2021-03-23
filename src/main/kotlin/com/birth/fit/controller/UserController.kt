@@ -1,9 +1,6 @@
 package com.birth.fit.controller
 
-import com.birth.fit.dto.ChangePasswordRequest
-import com.birth.fit.dto.JoinRequest
-import com.birth.fit.dto.LoginRequest
-import com.birth.fit.dto.TokenResponse
+import com.birth.fit.dto.*
 import com.birth.fit.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
@@ -14,6 +11,11 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     @Autowired val userService: UserService
 ) {
+
+    @GetMapping("/profile")
+    fun getProfile(@RequestHeader("Authorization") bearerToken: String): ProfileResponse {
+        return userService.getProfile(bearerToken)
+    }
 
     @PostMapping("/join")
     fun join(@RequestBody @Validated joinRequest: JoinRequest) {
