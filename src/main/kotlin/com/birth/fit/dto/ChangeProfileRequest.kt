@@ -1,6 +1,6 @@
 package com.birth.fit.dto
 
 class ChangeProfileRequest(
-    val id: String,
+    val userId: String,
     val password: String?
 )
