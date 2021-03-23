@@ -77,4 +77,17 @@ class UserService(
         user.password = aes256Util.aesEncode(passwordRequest.password)
         userRepository.save(user)
     }
+
+    fun changeProfile(bearerToken: String, profileRequest: ChangeProfileRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        if(user.userId != profileRequest.id) user.userId = profileRequest.id
+        profileRequest.password?.let { user.password = profileRequest.password }
+
+        userRepository.save(user)
+    }
 }

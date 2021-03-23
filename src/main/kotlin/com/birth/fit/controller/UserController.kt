@@ -31,4 +31,12 @@ class UserController(
     fun findPassword(@RequestBody @Validated changePasswordRequest: ChangePasswordRequest) {
         userService.findPassword(changePasswordRequest)
     }
+
+    @PutMapping("/profile")
+    fun changeProfile(
+        @RequestHeader("Authorization") bearerToken: String,
+        @RequestBody @Validated profileRequest: ChangeProfileRequest
+    ) {
+        userService.changeProfile(bearerToken, profileRequest)
+    }
 }
