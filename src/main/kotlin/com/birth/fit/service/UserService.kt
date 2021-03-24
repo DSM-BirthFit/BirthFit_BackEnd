@@ -5,10 +5,7 @@ import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.EmailRepository
 import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.*
-import com.birth.fit.exception.error.ExpiredTokenException
-import com.birth.fit.exception.error.InvalidAuthEmailException
-import com.birth.fit.exception.error.LoginFailedException
-import com.birth.fit.exception.error.UserNotFoundException
+import com.birth.fit.exception.error.*
 import com.birth.fit.util.AES256Util
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
@@ -74,6 +71,10 @@ class UserService(
         val user: User? = userRepository.findByEmail(email)
         user?: throw UserNotFoundException("This email is not subscribed to.")
 
+        if(user.password == passwordRequest.password) {
+            throw PasswordSameException("The password are same before.")
+        }
+
         user.password = aes256Util.aesEncode(passwordRequest.password)
         userRepository.save(user)
     }
@@ -86,7 +87,11 @@ class UserService(
         user?: throw UserNotFoundException("User not found.")
 
         if(user.userId != profileRequest.userId) user.userId = profileRequest.userId
-        profileRequest.password?.let { user.password = profileRequest.password }
+        if(profileRequest.password != null && user.password == profileRequest.password) {
+            throw PasswordSameException("The password are same before.")
+        }
+
+        profileRequest.password?.let { user.password = aes256Util.aesEncode(profileRequest.password) }
 
         userRepository.save(user)
     }
