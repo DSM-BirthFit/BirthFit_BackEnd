@@ -33,19 +33,21 @@ class HelpService(
         val helps: Page<Help> = helpRepository.findAll(pageable)
         val list: MutableList<HelpListResponse> = ArrayList()
 
-        for(help in helps) {
-            val user: User? = userRepository.findByEmail(help.userEmail)
-            user?: throw UserNotFoundException("User not found.")
+        helps.let {
+            for(help in helps) {
+                val user: User? = userRepository.findByEmail(help.userEmail)
+                user?: throw UserNotFoundException("User not found.")
 
-            list.add(
-                HelpListResponse(
-                    helpId = help.id!!,
-                    title = help.title,
-                    userEmail = user.email,
-                    answer = helpAnswerRepository.countByHelpId(help.id!!),
-                    like = helpLikeRepository.countByHelpId(help.id!!)
+                list.add(
+                    HelpListResponse(
+                        helpId = help.id!!,
+                        title = help.title,
+                        userEmail = user.email,
+                        answer = helpAnswerRepository.countByHelpId(help.id!!),
+                        like = helpLikeRepository.countByHelpId(help.id!!)
+                    )
                 )
-            )
+            }
         }
         return list
     }
