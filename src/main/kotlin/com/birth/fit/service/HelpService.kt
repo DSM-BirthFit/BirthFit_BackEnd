@@ -2,6 +2,7 @@ package com.birth.fit.service
 
 import com.birth.fit.domain.entity.Help
 import com.birth.fit.domain.entity.HelpComment
+import com.birth.fit.domain.entity.HelpLike
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.HelpAnswerRepository
 import com.birth.fit.domain.repository.HelpLikeRepository
@@ -93,7 +94,7 @@ class HelpService(
             view = help.view,
             like = helpLikeRepository.countByHelpId(helpId),
             isMine = user.email == author!!.email,
-            isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email),
+            isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email) != null,
             answer = list
         )
     }
@@ -126,6 +127,29 @@ class HelpService(
         help?: throw PostNotFoundException("Post not Found")
 
         helpRepository.save(help.updateContent(postRequest))
+    }
+
+    fun like(bearerToken: String?, helpId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val help: Help? = helpRepository.findById(helpId)
+        help?: throw PostNotFoundException("Post not Found")
+
+        val like: HelpLike? = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email)
+        if(like == null) {
+            helpLikeRepository.save(
+                HelpLike(
+                    userEmail = user.email,
+                    helpId = helpId
+                )
+            )
+        } else {
+            helpLikeRepository.delete(like)
+        }
     }
 
     fun deleteHelp(bearerToken: String?, helpId: Int) {
