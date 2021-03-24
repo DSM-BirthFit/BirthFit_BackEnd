@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface HelpLikeRepository: JpaRepository<HelpLike, String> {
+interface HelpLikeRepository: JpaRepository<HelpLike, Any> {
     fun countByHelpId(helpId: Int): Int?
 }
