@@ -36,4 +36,10 @@ class HelpController(
                    @RequestBody @Validated postRequest: PostRequest) {
         helpService.updateHelp(bearerToken, helpId, postRequest)
     }
+
+    @DeleteMapping("/{helpId}")
+    fun deleteHelp(@RequestHeader("Authorization") bearerToken: String?,
+                   @PathVariable @Validated helpId: Int) {
+        helpService.deleteHelp(bearerToken, helpId)
+    }
 }
