@@ -1,5 +1,6 @@
 package com.birth.fit.controller
 
+import com.birth.fit.dto.HelpContentResponse
 import com.birth.fit.dto.HelpListResponse
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.service.HelpService
@@ -19,9 +20,15 @@ class HelpController(
 ) {
 
     @GetMapping
-    fun getBoardList(@RequestHeader("Authorization") bearerToken: String?,
+    fun getList(@RequestHeader("Authorization") bearerToken: String?,
                      pageable: Pageable): MutableList<HelpListResponse>? {
         return helpService.getList(bearerToken, pageable)
+    }
+
+    @GetMapping("/{helpId}")
+    fun getContent(@RequestHeader("Authorization") bearerToken: String?,
+                   @PathVariable @Validated helpId: Int): HelpContentResponse? {
+        return helpService.getContent(bearerToken, helpId)
     }
 
     @PostMapping
