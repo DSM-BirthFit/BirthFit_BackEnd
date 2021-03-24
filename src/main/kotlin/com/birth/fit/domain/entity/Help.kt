@@ -1,5 +1,6 @@
 package com.birth.fit.domain.entity
 
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -18,5 +19,8 @@ class Help (
     var title: String,
 
     @Column(name = "content")
-    var content: String
+    var content: String,
+
+    @Column(name = "created_at")
+    val createdAt: LocalDateTime
 )
