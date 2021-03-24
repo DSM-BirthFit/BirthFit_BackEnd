@@ -1,5 +1,6 @@
 package com.birth.fit.domain.entity
 
+import com.birth.fit.dto.PostRequest
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -10,17 +11,32 @@ class Help (
     @Id
     @Column(name = "help_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Int? = null,
+    internal var id: Int? = null,
 
     @Column(name = "user_email")
-    val userEmail: String,
+    internal val userEmail: String,
 
     @Column(name = "title")
-    var title: String,
+    internal var title: String,
 
     @Column(name = "content")
-    var content: String,
+    internal var content: String,
 
     @Column(name = "created_at")
-    val createdAt: LocalDateTime
-)
+    internal val createdAt: LocalDateTime,
+
+    @Column(name = "view")
+    internal var view: Int = 0
+) {
+
+    fun view(): Help {
+        view++
+        return this
+    }
+
+    fun updateContent(postRequest: PostRequest): Help {
+        this.title = postRequest.title
+        this.content = postRequest.content
+        return this
+    }
+}

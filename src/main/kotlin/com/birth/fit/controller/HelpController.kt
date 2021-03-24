@@ -26,7 +26,14 @@ class HelpController(
 
     @PostMapping
     fun write(@RequestHeader("Authorization") bearerToken: String?,
-                 @RequestBody @Validated postRequest: PostRequest) {
+              @RequestBody @Validated postRequest: PostRequest) {
         return helpService.write(bearerToken, postRequest)
+    }
+
+    @PutMapping("/{helpId}")
+    fun updateHelp(@RequestHeader("Authorization") bearerToken: String?,
+                   @PathVariable @Validated helpId: Int,
+                   @RequestBody @Validated postRequest: PostRequest) {
+        helpService.updateHelp(bearerToken, helpId, postRequest)
     }
 }

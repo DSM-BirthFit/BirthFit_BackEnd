@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface HelpRepository: JpaRepository<Help, String>
+interface HelpRepository: JpaRepository<Help, String> {
+    fun findById(id: Int): Help?
+}

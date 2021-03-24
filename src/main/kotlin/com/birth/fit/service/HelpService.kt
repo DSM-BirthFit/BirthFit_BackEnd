@@ -9,6 +9,7 @@ import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.HelpListResponse
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.exception.error.ExpiredTokenException
+import com.birth.fit.exception.error.PostNotFoundException
 import com.birth.fit.exception.error.UserNotFoundException
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
@@ -67,5 +68,18 @@ class HelpService(
                 createdAt = LocalDateTime.now()
             )
         )
+    }
+
+    fun updateHelp(bearerToken: String?, helpId: Int, postRequest: PostRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val help: Help? = helpRepository.findById(helpId)
+        help?: throw PostNotFoundException("Post not Found")
+
+        helpRepository.save(help.updateContent(postRequest))
     }
 }
