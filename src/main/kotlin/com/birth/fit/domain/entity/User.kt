@@ -18,10 +18,4 @@ class User(
 
     @OneToMany(mappedBy = "userEmail")
     private val help: List<Help>? = null
-) {
-    fun update(userId: String, password: String) {
-        this.userId = userId
-        this.password = password
-    }
-
-}
+)
