@@ -12,14 +12,14 @@ class ApiExceptionHandler {
 
     @ExceptionHandler(
         InvalidAuthEmailException::class,
-        InvalidAuthCodeException::class
+        InvalidAuthCodeException::class,
+        LoginFailedException::class
     )
     fun badRequestException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.BAD_REQUEST, e.message!!)
     }
 
     @ExceptionHandler(
-        LoginFailedException::class,
         InvalidTokenException::class
     )
     fun requestFailedException(e: Exception): ResponseEntity<ErrorResponse> {
@@ -39,7 +39,10 @@ class ApiExceptionHandler {
         return generateErrorResponse(HttpStatus.NOT_FOUND, e.message!!)
     }
 
-    @ExceptionHandler(UserAlreadyExistException::class)
+    @ExceptionHandler(
+        UserAlreadyExistException::class,
+        PasswordSameException::class
+    )
     fun duplicateException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.CONFLICT, e.message!!)
     }
