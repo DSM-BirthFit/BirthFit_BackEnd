@@ -26,7 +26,10 @@ class Help (
     internal val createdAt: LocalDateTime,
 
     @Column(name = "view")
-    internal var view: Int = 0
+    internal var view: Int = 0,
+
+    @OneToMany(mappedBy = "helpId")
+    private val comment: MutableList<HelpComment>? = null
 ) {
 
     fun view(): Help {
