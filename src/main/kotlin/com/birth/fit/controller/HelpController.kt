@@ -10,9 +10,6 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.GetMapping
 
-
-
-
 @RestController
 @RequestMapping("/help")
 class HelpController(
@@ -42,6 +39,12 @@ class HelpController(
                    @PathVariable @Validated helpId: Int,
                    @RequestBody @Validated postRequest: PostRequest) {
         helpService.updateHelp(bearerToken, helpId, postRequest)
+    }
+
+    @PutMapping("/{helpId}/like")
+    fun like(@RequestHeader("Authorization") bearerToken: String?,
+             @PathVariable @Validated helpId: Int) {
+        helpService.like(bearerToken, helpId)
     }
 
     @DeleteMapping("/{helpId}")

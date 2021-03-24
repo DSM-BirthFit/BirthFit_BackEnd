@@ -10,10 +10,10 @@ import javax.persistence.IdClass
 class HelpLike(
 
     @Id
-    private val userEmail: String,
+    internal val userEmail: String,
 
     @Id
-    private val helpId: Int
+    internal val helpId: Int
 ): Serializable {
     private val serialVersionUID: Long = 1L
 }

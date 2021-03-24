@@ -8,5 +8,5 @@ import java.util.*
 @Repository
 interface HelpLikeRepository: JpaRepository<HelpLike, Any> {
     fun countByHelpId(helpId: Int): Int?
-    fun findByHelpIdAndUserEmail(helpId: Int, userEmail: String): Boolean
+    fun findByHelpIdAndUserEmail(helpId: Int, userEmail: String): HelpLike?
 }
