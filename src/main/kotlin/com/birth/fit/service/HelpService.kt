@@ -1,11 +1,14 @@
 package com.birth.fit.service
 
 import com.birth.fit.domain.entity.Help
+import com.birth.fit.domain.entity.HelpComment
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.HelpAnswerRepository
 import com.birth.fit.domain.repository.HelpLikeRepository
 import com.birth.fit.domain.repository.HelpRepository
 import com.birth.fit.domain.repository.UserRepository
+import com.birth.fit.dto.HelpCommentResponse
+import com.birth.fit.dto.HelpContentResponse
 import com.birth.fit.dto.HelpListResponse
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.exception.error.ExpiredTokenException
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import kotlin.collections.ArrayList
 
 @Service
 class HelpService(
@@ -51,6 +55,47 @@ class HelpService(
             }
         }
         return list
+    }
+
+    fun getContent(bearerToken: String?, helpId: Int): HelpContentResponse? {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val help: Help? = helpRepository.findById(helpId)
+        help?: throw PostNotFoundException("Post not Found")
+
+        val author: User? = userRepository.findByEmail(help.userEmail)
+
+        val list: MutableList<HelpCommentResponse> = ArrayList()
+        val answers: MutableList<HelpComment>? = helpAnswerRepository.findAllByHelpId(helpId)
+        answers?.run {
+            this.forEach {
+                val writer: User = userRepository.findByEmail(it.userEmail)!!
+                list.add(
+                    HelpCommentResponse(
+                        userId = writer.userId,
+                        content = it.content,
+                        isMine = writer.email == user.email
+                    )
+                )
+            }
+        }
+
+        helpRepository.save(help.view())
+        return HelpContentResponse(
+            title = help.title,
+            content = help.content,
+            userId = user.userId,
+            createdAt = help.createdAt,
+            view = help.view,
+            like = helpLikeRepository.countByHelpId(helpId),
+            isMine = user.email == author!!.email,
+            isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email),
+            answer = list
+        )
     }
 
     fun write(bearerToken: String?, postRequest: PostRequest){

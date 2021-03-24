@@ -6,12 +6,12 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-class HelpAnswer(
+class HelpComment(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val answerId: Int,
-    private val helpId: Int,
-    private val userEmail: String,
-    private val content: String
+    internal val answerId: Int,
+    internal val helpId: Int,
+    internal val userEmail: String,
+    internal val content: String
 )
