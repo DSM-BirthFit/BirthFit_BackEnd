@@ -82,4 +82,17 @@ class HelpService(
 
         helpRepository.save(help.updateContent(postRequest))
     }
+
+    fun deleteHelp(bearerToken: String?, helpId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val help: Help? = helpRepository.findById(helpId)
+        help?: throw PostNotFoundException("Post not Found")
+
+        helpRepository.delete(help)
+    }
 }
