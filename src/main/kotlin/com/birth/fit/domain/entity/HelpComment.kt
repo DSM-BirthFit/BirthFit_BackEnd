@@ -13,5 +13,10 @@ class HelpComment(
     internal val commentId: Int? = null,
     internal val helpId: Int,
     internal val userEmail: String,
-    internal val content: String
-)
+    internal var content: String
+) {
+    fun updateComment(comment: String): HelpComment {
+        this.content = comment
+        return this
+    }
+}

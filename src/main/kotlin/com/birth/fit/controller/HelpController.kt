@@ -55,6 +55,13 @@ class HelpController(
         helpService.like(bearerToken, helpId)
     }
 
+    @PutMapping("/{commentId}/comment")
+    fun updateComment(@RequestHeader("Authorization") bearerToken: String?,
+                      @PathVariable @Validated commentId: Int,
+                      @RequestBody @Validated postCommentRequest: PostCommentRequest) {
+        helpService.updateComment(bearerToken, commentId, postCommentRequest)
+    }
+
     @DeleteMapping("/{helpId}")
     fun deleteHelp(@RequestHeader("Authorization") bearerToken: String?,
                    @PathVariable @Validated helpId: Int) {
