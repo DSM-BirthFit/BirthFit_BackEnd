@@ -192,4 +192,17 @@ class HelpService(
 
         helpRepository.delete(help)
     }
+
+    fun deleteComment(bearerToken: String?, commentId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val comment: HelpComment? = helpCommentRepository.findByCommentId(commentId)
+        comment?: throw CommentNotFoundException("Comments do not exist.")
+
+        helpCommentRepository.delete(comment)
+    }
 }

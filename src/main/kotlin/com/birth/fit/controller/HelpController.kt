@@ -35,7 +35,7 @@ class HelpController(
         return helpService.write(bearerToken, postRequest)
     }
 
-    @PostMapping("/{helpId}/comment")
+    @PostMapping("/comment/{helpId}")
     fun writeComment(@RequestHeader("Authorization") bearerToken: String?,
                      @PathVariable @Validated helpId: Int,
                      @RequestBody @Validated postCommentRequest: PostCommentRequest) {
@@ -55,7 +55,7 @@ class HelpController(
         helpService.like(bearerToken, helpId)
     }
 
-    @PutMapping("/{commentId}/comment")
+    @PutMapping("/comment/{commentId}")
     fun updateComment(@RequestHeader("Authorization") bearerToken: String?,
                       @PathVariable @Validated commentId: Int,
                       @RequestBody @Validated postCommentRequest: PostCommentRequest) {
@@ -66,5 +66,11 @@ class HelpController(
     fun deleteHelp(@RequestHeader("Authorization") bearerToken: String?,
                    @PathVariable @Validated helpId: Int) {
         helpService.deleteHelp(bearerToken, helpId)
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    fun updateComment(@RequestHeader("Authorization") bearerToken: String?,
+                      @PathVariable @Validated commentId: Int) {
+        helpService.deleteComment(bearerToken, commentId)
     }
 }
