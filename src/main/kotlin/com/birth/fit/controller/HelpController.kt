@@ -2,6 +2,7 @@ package com.birth.fit.controller
 
 import com.birth.fit.dto.HelpContentResponse
 import com.birth.fit.dto.HelpListResponse
+import com.birth.fit.dto.PostCommentRequest
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.service.HelpService
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,6 +33,13 @@ class HelpController(
     fun write(@RequestHeader("Authorization") bearerToken: String?,
               @RequestBody @Validated postRequest: PostRequest) {
         return helpService.write(bearerToken, postRequest)
+    }
+
+    @PostMapping("/{helpId}/comment")
+    fun writeComment(@RequestHeader("Authorization") bearerToken: String?,
+                     @PathVariable @Validated helpId: Int,
+                     @RequestBody @Validated postCommentRequest: PostCommentRequest) {
+        helpService.writeComment(bearerToken, helpId, postCommentRequest)
     }
 
     @PutMapping("/{helpId}")

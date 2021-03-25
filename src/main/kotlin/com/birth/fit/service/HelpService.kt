@@ -4,14 +4,8 @@ import com.birth.fit.domain.entity.Help
 import com.birth.fit.domain.entity.HelpComment
 import com.birth.fit.domain.entity.HelpLike
 import com.birth.fit.domain.entity.User
-import com.birth.fit.domain.repository.HelpAnswerRepository
-import com.birth.fit.domain.repository.HelpLikeRepository
-import com.birth.fit.domain.repository.HelpRepository
-import com.birth.fit.domain.repository.UserRepository
-import com.birth.fit.dto.HelpCommentResponse
-import com.birth.fit.dto.HelpContentResponse
-import com.birth.fit.dto.HelpListResponse
-import com.birth.fit.dto.PostRequest
+import com.birth.fit.domain.repository.*
+import com.birth.fit.dto.*
 import com.birth.fit.exception.error.ExpiredTokenException
 import com.birth.fit.exception.error.PostNotFoundException
 import com.birth.fit.exception.error.UserNotFoundException
@@ -29,6 +23,7 @@ class HelpService(
     @Autowired val helpRepository: HelpRepository,
     @Autowired val helpLikeRepository: HelpLikeRepository,
     @Autowired val helpAnswerRepository: HelpAnswerRepository,
+    @Autowired val helpCommentRepository: HelpCommentRepository,
     @Autowired val jwtTokenProvider: JwtTokenProvider
 ) {
 
@@ -112,6 +107,25 @@ class HelpService(
                 title = postRequest.title,
                 content = postRequest.content,
                 createdAt = LocalDateTime.now()
+            )
+        )
+    }
+
+    fun writeComment(bearerToken: String?, helpId: Int, postCommentRequest: PostCommentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val help: Help? = helpRepository.findById(helpId)
+        help?: throw PostNotFoundException("Post not Found")
+
+        helpCommentRepository.save(
+            HelpComment(
+                userEmail = user.email,
+                helpId = helpId,
+                content = postCommentRequest.comment
             )
         )
     }
