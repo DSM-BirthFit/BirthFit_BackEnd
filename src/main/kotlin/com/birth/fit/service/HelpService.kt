@@ -6,6 +6,7 @@ import com.birth.fit.domain.entity.HelpLike
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.*
 import com.birth.fit.dto.*
+import com.birth.fit.exception.error.CommentNotFoundException
 import com.birth.fit.exception.error.ExpiredTokenException
 import com.birth.fit.exception.error.PostNotFoundException
 import com.birth.fit.exception.error.UserNotFoundException
@@ -22,7 +23,6 @@ class HelpService(
     @Autowired val userRepository: UserRepository,
     @Autowired val helpRepository: HelpRepository,
     @Autowired val helpLikeRepository: HelpLikeRepository,
-    @Autowired val helpAnswerRepository: HelpAnswerRepository,
     @Autowired val helpCommentRepository: HelpCommentRepository,
     @Autowired val jwtTokenProvider: JwtTokenProvider
 ) {
@@ -44,7 +44,7 @@ class HelpService(
                         helpId = help.id!!,
                         title = help.title,
                         userEmail = user.email,
-                        answer = helpAnswerRepository.countByHelpId(help.id!!),
+                        comment = helpCommentRepository.countByHelpId(help.id!!),
                         like = helpLikeRepository.countByHelpId(help.id!!)
                     )
                 )
@@ -66,12 +66,13 @@ class HelpService(
         val author: User? = userRepository.findByEmail(help.userEmail)
 
         val list: MutableList<HelpCommentResponse> = ArrayList()
-        val answers: MutableList<HelpComment>? = helpAnswerRepository.findAllByHelpId(helpId)
-        answers?.run {
+        val comment: MutableList<HelpComment>? = helpCommentRepository.findAllByHelpId(helpId)
+        comment?.run {
             this.forEach {
                 val writer: User = userRepository.findByEmail(it.userEmail)!!
                 list.add(
                     HelpCommentResponse(
+                        commentId = it.commentId!!,
                         userId = writer.userId,
                         content = it.content,
                         isMine = writer.email == user.email
@@ -164,6 +165,19 @@ class HelpService(
         } else {
             helpLikeRepository.delete(like)
         }
+    }
+
+    fun updateComment(bearerToken: String?, commentId: Int, postCommentRequest: PostCommentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val comment: HelpComment? = helpCommentRepository.findByCommentId(commentId)
+        comment?: throw CommentNotFoundException("Comments do not exist.")
+
+        helpCommentRepository.save(comment.updateComment(postCommentRequest.comment))
     }
 
     fun deleteHelp(bearerToken: String?, helpId: Int) {

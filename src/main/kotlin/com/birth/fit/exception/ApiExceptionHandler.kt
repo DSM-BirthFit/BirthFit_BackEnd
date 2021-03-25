@@ -33,7 +33,8 @@ class ApiExceptionHandler {
 
     @ExceptionHandler(
         UserNotFoundException::class,
-        PostNotFoundException::class
+        PostNotFoundException::class,
+        CommentNotFoundException::class
     )
     fun notFoundException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.NOT_FOUND, e.message!!)
