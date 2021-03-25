@@ -10,7 +10,7 @@ class HelpComment(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    internal val answerId: Int? = null,
+    internal val commentId: Int? = null,
     internal val helpId: Int,
     internal val userEmail: String,
     internal val content: String

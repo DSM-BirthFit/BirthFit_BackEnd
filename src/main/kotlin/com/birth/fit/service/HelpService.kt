@@ -72,6 +72,7 @@ class HelpService(
                 val writer: User = userRepository.findByEmail(it.userEmail)!!
                 list.add(
                     HelpCommentResponse(
+                        commentId = it.commentId!!,
                         userId = writer.userId,
                         content = it.content,
                         isMine = writer.email == user.email
