@@ -27,6 +27,11 @@ class UserController(
         return userService.login(loginRequest)
     }
 
+    @PutMapping
+    fun refreshToken(@RequestHeader("X-Refresh-Token") refreshToken: String?): TokenResponse {
+        return userService.refreshToken(refreshToken)
+    }
+
     @PutMapping("/password")
     fun findPassword(@RequestBody @Validated changePasswordRequest: ChangePasswordRequest) {
         userService.findPassword(changePasswordRequest)

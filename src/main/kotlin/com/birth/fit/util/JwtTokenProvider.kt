@@ -79,4 +79,9 @@ class JwtTokenProvider(
             return false
         }
     }
+
+    fun getType(token: String): Any? {
+        val claims: Jws<Claims> = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+        return claims.body["type"]
+    }
 }

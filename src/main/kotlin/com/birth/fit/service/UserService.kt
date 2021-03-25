@@ -54,10 +54,19 @@ class UserService(
             throw LoginFailedException("Passwords do not match.")
         }
 
-        val accessToken: String = jwtTokenProvider.createAccessToken(username)
-        val refreshToken: String = jwtTokenProvider.createRefreshToken(username)
+        return tokenResponse(user.email)
+    }
 
-        return TokenResponse(accessToken, refreshToken, "Bearer")
+    fun refreshToken(refreshToken: String?): TokenResponse {
+        val token: String? = jwtTokenProvider.resolveToken(refreshToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        if(jwtTokenProvider.getType(token) != "refresh_token") throw InvalidTokenException("Token type error.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        return tokenResponse(user.email)
     }
 
     fun findPassword(passwordRequest: ChangePasswordRequest) {
@@ -94,5 +103,13 @@ class UserService(
         profileRequest.password?.let { user.password = aes256Util.aesEncode(profileRequest.password) }
 
         userRepository.save(user)
+    }
+
+    private fun tokenResponse(username: String): TokenResponse {
+        val accessToken: String = jwtTokenProvider.createAccessToken(username)
+        val refreshToken: String = jwtTokenProvider.createRefreshToken(username)
+
+
+        return TokenResponse(accessToken, refreshToken, "Bearer")
     }
 }
