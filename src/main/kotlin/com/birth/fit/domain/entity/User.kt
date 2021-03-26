@@ -23,5 +23,8 @@ class User(
     private val helpLike: MutableList<HelpLike>? = null,
 
     @OneToMany(mappedBy = "userEmail")
-    private val comment: MutableList<HelpComment>? = null
+    private val comment: MutableList<HelpComment>? = null,
+
+    @OneToMany(mappedBy = "userEmail")
+    private val qna: MutableList<Qna>? = null
 )
