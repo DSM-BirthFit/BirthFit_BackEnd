@@ -69,7 +69,7 @@ class HelpController(
     }
 
     @DeleteMapping("/comment/{commentId}")
-    fun updateComment(@RequestHeader("Authorization") bearerToken: String?,
+    fun deleteComment(@RequestHeader("Authorization") bearerToken: String?,
                       @PathVariable @Validated commentId: Int) {
         helpService.deleteComment(bearerToken, commentId)
     }
