@@ -17,5 +17,11 @@ class User(
     internal var password: String,
 
     @OneToMany(mappedBy = "userEmail")
-    private val help: List<Help>? = null
+    private val help: MutableList<Help>? = null,
+
+    @OneToMany(mappedBy = "userEmail")
+    private val helpLike: MutableList<HelpLike>? = null,
+
+    @OneToMany(mappedBy = "userEmail")
+    private val comment: MutableList<HelpComment>? = null
 )
