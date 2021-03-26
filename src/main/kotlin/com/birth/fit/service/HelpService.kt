@@ -35,7 +35,7 @@ class HelpService(
         val list: MutableList<HelpListResponse> = ArrayList()
 
         helps.let {
-            for(help in helps) {
+            for(help in it) {
                 val user: User? = userRepository.findByEmail(help.userEmail)
                 user?: throw UserNotFoundException("User not found.")
 
@@ -43,7 +43,6 @@ class HelpService(
                     HelpListResponse(
                         helpId = help.id!!,
                         title = help.title,
-                        userEmail = user.email,
                         comment = helpCommentRepository.countByHelpId(help.id!!),
                         like = helpLikeRepository.countByHelpId(help.id!!)
                     )
