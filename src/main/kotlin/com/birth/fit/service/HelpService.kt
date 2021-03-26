@@ -43,7 +43,6 @@ class HelpService(
                     HelpListResponse(
                         helpId = help.id!!,
                         title = help.title,
-                        userEmail = user.email,
                         comment = helpCommentRepository.countByHelpId(help.id!!),
                         like = helpLikeRepository.countByHelpId(help.id!!)
                     )
