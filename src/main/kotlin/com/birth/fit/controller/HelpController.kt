@@ -1,9 +1,6 @@
 package com.birth.fit.controller
 
-import com.birth.fit.dto.HelpContentResponse
-import com.birth.fit.dto.HelpListResponse
-import com.birth.fit.dto.PostCommentRequest
-import com.birth.fit.dto.PostRequest
+import com.birth.fit.dto.*
 import com.birth.fit.service.HelpService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -20,7 +17,7 @@ class HelpController(
 
     @GetMapping
     fun getList(@RequestHeader("Authorization") bearerToken: String?,
-                @PageableDefault(size = 10) pageable: Pageable): MutableList<HelpListResponse>? {
+                @PageableDefault(size = 10) pageable: Pageable): HelpPageResponse? {
         return helpService.getList(bearerToken, pageable)
     }
 
