@@ -9,6 +9,7 @@ import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.HelpListResponse
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.dto.QnaListResponse
+import com.birth.fit.dto.QnaPageResponse
 import com.birth.fit.exception.error.ExpiredTokenException
 import com.birth.fit.exception.error.UserNotFoundException
 import com.birth.fit.util.JwtTokenProvider
@@ -27,7 +28,7 @@ class QnaService(
     @Autowired private val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    fun getList(bearerToken: String?, pageable: Pageable): MutableList<QnaListResponse> {
+    fun getList(bearerToken: String?, pageable: Pageable): QnaPageResponse? {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -49,7 +50,14 @@ class QnaService(
                 )
             }
         }
-        return list
+        return QnaPageResponse(
+            totalElement = qnaList.totalElements.toInt(),
+            totalPage = qnaList.totalPages,
+            listResponse = list
+        )
+    }
+
+    fun getContent(bearerToken: String?, qnaId: Int) {
     }
 
     fun write(bearerToken: String?, postRequest: PostRequest) {
