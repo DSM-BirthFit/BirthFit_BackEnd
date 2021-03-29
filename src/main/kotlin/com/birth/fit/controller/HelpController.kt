@@ -7,6 +7,7 @@ import com.birth.fit.dto.PostRequest
 import com.birth.fit.service.HelpService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,7 +20,7 @@ class HelpController(
 
     @GetMapping
     fun getList(@RequestHeader("Authorization") bearerToken: String?,
-                     pageable: Pageable): MutableList<HelpListResponse>? {
+                @PageableDefault(size = 10) pageable: Pageable): MutableList<HelpListResponse>? {
         return helpService.getList(bearerToken, pageable)
     }
 
