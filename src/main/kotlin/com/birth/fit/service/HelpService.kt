@@ -94,7 +94,7 @@ class HelpService(
             like = help.likeCount,
             isMine = user.email == author!!.email,
             isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email) != null,
-            answer = list
+            comment = list
         )
     }
 
