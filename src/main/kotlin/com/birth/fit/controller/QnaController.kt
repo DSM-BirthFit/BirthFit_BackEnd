@@ -32,4 +32,11 @@ class QnaController(
               @RequestBody @Validated postRequest: PostRequest) {
         qnaService.write(bearerToken, postRequest)
     }
+
+    @PutMapping("/{qnaId}")
+    fun updateQna(@RequestHeader("Authorization") bearerToken: String?,
+                  @PathVariable @Validated qnaId: Int,
+                  @RequestBody @Validated postRequest: PostRequest) {
+        qnaService.updateQna(bearerToken, qnaId, postRequest)
+    }
 }

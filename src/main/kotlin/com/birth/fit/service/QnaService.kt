@@ -112,4 +112,17 @@ class QnaService(
             )
         )
     }
+
+    fun updateQna(bearerToken: String?, qnaId: Int, postRequest: PostRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId);
+        qna?: throw PostNotFoundException("Post not Found.")
+
+        qnaRepository.save(qna.updateContent(postRequest))
+    }
 }
