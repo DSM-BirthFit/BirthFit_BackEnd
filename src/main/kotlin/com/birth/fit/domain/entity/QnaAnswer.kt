@@ -14,4 +14,10 @@ class QnaAnswer(
     internal val qnaId: Int,
     internal val userEmail: String,
     internal var content: String
-)
+) {
+
+    fun updateAnswer(answer: String): QnaAnswer {
+        this.content = answer
+        return this
+    }
+}
