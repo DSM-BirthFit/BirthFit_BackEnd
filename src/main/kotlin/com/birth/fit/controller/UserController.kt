@@ -38,10 +38,8 @@ class UserController(
     }
 
     @PutMapping("/profile")
-    fun changeProfile(
-        @RequestHeader("Authorization") bearerToken: String,
-        @RequestBody @Validated profileRequest: ChangeProfileRequest
-    ) {
+    fun changeProfile(@RequestHeader("Authorization") bearerToken: String,
+                      @RequestBody @Validated profileRequest: ChangeProfileRequest) {
         userService.changeProfile(bearerToken, profileRequest)
     }
 }
