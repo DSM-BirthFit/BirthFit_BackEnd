@@ -40,6 +40,12 @@ class QnaController(
         qnaService.updateQna(bearerToken, qnaId, postRequest)
     }
 
+    @PutMapping("/{qnaId}/like")
+    fun like(@RequestHeader("Authorization") bearerToken: String?,
+             @PathVariable @Validated qnaId: Int) {
+        qnaService.like(bearerToken, qnaId)
+    }
+
     @DeleteMapping("/{qnaId}")
     fun deleteQna(@RequestHeader("Authorization") bearerToken: String?,
                   @PathVariable @Validated qnaId: Int) {

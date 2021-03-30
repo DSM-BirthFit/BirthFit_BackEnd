@@ -126,6 +126,31 @@ class QnaService(
         qnaRepository.save(qna.updateContent(postRequest))
     }
 
+    fun like(bearerToken: String?, qnaId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not Found")
+
+        val like: QnaLike? =qnaLikeRepository.findByQnaIdAndUserEmail(qnaId, user.email)
+        if(like == null) {
+            qnaLikeRepository.save(
+                QnaLike(
+                    userEmail = user.email,
+                    qnaId = qnaId
+                )
+            )
+            qnaRepository.save(qna.like())
+        } else {
+            qnaLikeRepository.delete(like)
+            qnaRepository.save(qna.unLike())
+        }
+    }
+
     fun deleteQna(bearerToken: String?, qnaId: Int) {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
