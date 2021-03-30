@@ -39,4 +39,10 @@ class QnaController(
                   @RequestBody @Validated postRequest: PostRequest) {
         qnaService.updateQna(bearerToken, qnaId, postRequest)
     }
+
+    @DeleteMapping("/{qnaId}")
+    fun deleteQna(@RequestHeader("Authorization") bearerToken: String?,
+                  @PathVariable @Validated qnaId: Int) {
+        qnaService.deleteQna(bearerToken, qnaId)
+    }
 }
