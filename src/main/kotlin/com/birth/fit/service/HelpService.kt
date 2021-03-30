@@ -27,7 +27,7 @@ class HelpService(
     @Autowired val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    fun getList(bearerToken: String?, pageable: Pageable): MutableList<HelpListResponse>? {
+    fun getList(bearerToken: String?, pageable: Pageable): HelpPageResponse? {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -49,7 +49,11 @@ class HelpService(
                 )
             }
         }
-        return list
+        return HelpPageResponse(
+            totalElement = helps.totalElements.toInt(),
+            totalPage = helps.totalPages,
+            listResponse = list
+        )
     }
 
     fun getContent(bearerToken: String?, helpId: Int): HelpContentResponse? {
