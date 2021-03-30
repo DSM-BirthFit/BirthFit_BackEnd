@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface QnaAnswerRepository: JpaRepository<QnaAnswer, Int> {
     fun countByQnaId(qnaId: Int): Int?
     fun findAllByQnaId(qnaId: Int): MutableList<QnaAnswer>?
+    fun findByAnswerId(answerId: Int): QnaAnswer?
 }

@@ -6,9 +6,7 @@ import com.birth.fit.domain.repository.QnaLikeRepository
 import com.birth.fit.domain.repository.QnaRepository
 import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.*
-import com.birth.fit.exception.error.ExpiredTokenException
-import com.birth.fit.exception.error.PostNotFoundException
-import com.birth.fit.exception.error.UserNotFoundException
+import com.birth.fit.exception.error.*
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -87,7 +85,7 @@ class QnaService(
             title = qna.title,
             content = qna.content,
             userId = author!!.userId,
-            createdAt = qna.createdAt,
+            createdAt = qna.createdAt.toString(),
             view = qna.view,
             like = qna.likeCount,
             isMine = user.email == author.email,
@@ -111,5 +109,101 @@ class QnaService(
                 createdAt = LocalDateTime.now()
             )
         )
+    }
+
+    fun writeAnswer(bearerToken: String?, qnaId: Int, contentRequest: ContentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not found.")
+
+        qnaAnswerRepository.save(
+            QnaAnswer(
+                qnaId = qnaId,
+                userEmail = user.email,
+                content = contentRequest.content
+            )
+        )
+    }
+
+    fun updateQna(bearerToken: String?, qnaId: Int, postRequest: PostRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId);
+        qna?: throw PostNotFoundException("Post not found.")
+
+        qnaRepository.save(qna.updateContent(postRequest))
+    }
+
+    fun like(bearerToken: String?, qnaId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not found")
+
+        val like: QnaLike? =qnaLikeRepository.findByQnaIdAndUserEmail(qnaId, user.email)
+        if(like == null) {
+            qnaLikeRepository.save(
+                QnaLike(
+                    userEmail = user.email,
+                    qnaId = qnaId
+                )
+            )
+            qnaRepository.save(qna.like())
+        } else {
+            qnaLikeRepository.delete(like)
+            qnaRepository.save(qna.unLike())
+        }
+    }
+
+    fun updateAnswer(bearerToken: String?, answerId: Int, contentRequest: ContentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val answer: QnaAnswer? = qnaAnswerRepository.findByAnswerId(answerId)
+        answer?: throw ContentNotFoundException("Comments do not exist.")
+
+        qnaAnswerRepository.save(answer.updateAnswer(contentRequest.content))
+    }
+
+    fun deleteQna(bearerToken: String?, qnaId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not found.")
+
+        qnaRepository.delete(qna)
+    }
+
+    fun deleteAnswer(bearerToken: String?, answerId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val answer: QnaAnswer? = qnaAnswerRepository.findByAnswerId(answerId)
+        answer?: throw ContentNotFoundException("Answer do not exist.")
+
+        qnaAnswerRepository.delete(answer)
     }
 }

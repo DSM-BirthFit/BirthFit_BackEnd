@@ -1,5 +1,6 @@
 package com.birth.fit.domain.entity
 
+import com.birth.fit.dto.PostRequest
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -38,6 +39,22 @@ class Qna(
 
     fun view(): Qna {
         view++
+        return this
+    }
+
+    fun like(): Qna {
+        likeCount++
+        return this
+    }
+
+    fun unLike(): Qna {
+        likeCount--
+        return this
+    }
+
+    fun updateContent(postRequest: PostRequest): Qna {
+        this.title = postRequest.title
+        this.content = postRequest.content
         return this
     }
 }
