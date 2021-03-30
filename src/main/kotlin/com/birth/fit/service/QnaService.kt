@@ -6,9 +6,7 @@ import com.birth.fit.domain.repository.QnaLikeRepository
 import com.birth.fit.domain.repository.QnaRepository
 import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.*
-import com.birth.fit.exception.error.ExpiredTokenException
-import com.birth.fit.exception.error.PostNotFoundException
-import com.birth.fit.exception.error.UserNotFoundException
+import com.birth.fit.exception.error.*
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
@@ -127,7 +125,7 @@ class QnaService(
             QnaAnswer(
                 qnaId = qnaId,
                 userEmail = user.email,
-                content = contentRequest.comment
+                content = contentRequest.content
             )
         )
     }
@@ -168,6 +166,19 @@ class QnaService(
             qnaLikeRepository.delete(like)
             qnaRepository.save(qna.unLike())
         }
+    }
+
+    fun updateAnswer(bearerToken: String?, answerId: Int, contentRequest: ContentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val answer: QnaAnswer? = qnaAnswerRepository.findByAnswerId(answerId)
+        answer?: throw ContentNotFoundException("Comments do not exist.")
+
+        qnaAnswerRepository.save(answer.updateAnswer(contentRequest.content))
     }
 
     fun deleteQna(bearerToken: String?, qnaId: Int) {
