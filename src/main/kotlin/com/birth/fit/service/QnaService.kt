@@ -45,7 +45,7 @@ class QnaService(
                         qnaId = qna.id!!,
                         title = qna.title,
                         answer = qnaAnswerRepository.countByQnaId(qna.id!!),
-                        like = qnaLikeRepository.countByQnaId(qna.id!!)
+                        like = qna.likeCount
                     )
                 )
             }

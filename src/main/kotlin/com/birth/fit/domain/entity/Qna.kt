@@ -24,5 +24,14 @@ class Qna(
     internal val createdAt: LocalDateTime,
 
     @Column(name = "view")
-    internal var view: Int = 0
+    internal var view: Int = 0,
+
+    @Column(name = "like_count")
+    internal var likeCount: Int = 0,
+
+    @OneToMany(mappedBy = "qnaId")
+    private val answer: MutableList<QnaAnswer>? = null,
+
+    @OneToMany(mappedBy = "qnaId")
+    private val likes: MutableList<QnaLike>? = null
 )
