@@ -44,7 +44,7 @@ class HelpService(
                         helpId = help.id!!,
                         title = help.title,
                         comment = helpCommentRepository.countByHelpId(help.id!!),
-                        like = helpLikeRepository.countByHelpId(help.id!!)
+                        like = help.likeCount
                     )
                 )
             }
@@ -91,7 +91,7 @@ class HelpService(
             userId = user.userId,
             createdAt = help.createdAt,
             view = help.view,
-            like = helpLikeRepository.countByHelpId(helpId),
+            like = help.likeCount,
             isMine = user.email == author!!.email,
             isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email) != null,
             answer = list
@@ -165,8 +165,10 @@ class HelpService(
                     helpId = helpId
                 )
             )
+            helpRepository.save(help.like())
         } else {
             helpLikeRepository.delete(like)
+            helpRepository.save(help.unLike())
         }
     }
 

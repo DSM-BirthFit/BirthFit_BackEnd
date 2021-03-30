@@ -28,12 +28,28 @@ class Help (
     @Column(name = "view")
     internal var view: Int = 0,
 
+    @Column(name = "like_count")
+    internal var likeCount: Int = 0,
+
     @OneToMany(mappedBy = "helpId")
-    private val comment: MutableList<HelpComment>? = null
+    private val comment: MutableList<HelpComment>? = null,
+
+    @OneToMany(mappedBy = "helpId")
+    private val likes: MutableList<HelpLike>? = null
 ) {
 
     fun view(): Help {
         view++
+        return this
+    }
+
+    fun like(): Help {
+        likeCount++
+        return this
+    }
+
+    fun unLike(): Help {
+        likeCount--
         return this
     }
 
