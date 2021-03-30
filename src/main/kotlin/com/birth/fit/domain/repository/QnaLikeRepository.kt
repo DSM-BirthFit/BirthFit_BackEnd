@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface QnaLikeRepository: JpaRepository<QnaLike, Any> {
-    fun findByQnaIdAndUserEmail(qnaId: Int, userEmail: String): HelpLike?
+    fun findByQnaIdAndUserEmail(qnaId: Int, userEmail: String): QnaLike?
 }
