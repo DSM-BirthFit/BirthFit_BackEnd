@@ -6,7 +6,7 @@ import com.birth.fit.domain.entity.HelpLike
 import com.birth.fit.domain.entity.User
 import com.birth.fit.domain.repository.*
 import com.birth.fit.dto.*
-import com.birth.fit.exception.error.CommentNotFoundException
+import com.birth.fit.exception.error.ContentNotFoundException
 import com.birth.fit.exception.error.ExpiredTokenException
 import com.birth.fit.exception.error.PostNotFoundException
 import com.birth.fit.exception.error.UserNotFoundException
@@ -36,9 +36,6 @@ class HelpService(
 
         helps.let {
             for(help in it) {
-                val user: User? = userRepository.findByEmail(help.userEmail)
-                user?: throw UserNotFoundException("User not found.")
-
                 list.add(
                     HelpListResponse(
                         helpId = help.id!!,
@@ -89,7 +86,7 @@ class HelpService(
             title = help.title,
             content = help.content,
             userId = user.userId,
-            createdAt = help.createdAt,
+            createdAt = help.createdAt.toString(),
             view = help.view,
             like = help.likeCount,
             isMine = user.email == author!!.email,
@@ -115,7 +112,7 @@ class HelpService(
         )
     }
 
-    fun writeComment(bearerToken: String?, helpId: Int, postCommentRequest: PostCommentRequest) {
+    fun writeComment(bearerToken: String?, helpId: Int, contentRequest: ContentRequest) {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -129,7 +126,7 @@ class HelpService(
             HelpComment(
                 userEmail = user.email,
                 helpId = helpId,
-                content = postCommentRequest.comment
+                content = contentRequest.content
             )
         )
     }
@@ -172,7 +169,7 @@ class HelpService(
         }
     }
 
-    fun updateComment(bearerToken: String?, commentId: Int, postCommentRequest: PostCommentRequest) {
+    fun updateComment(bearerToken: String?, commentId: Int, contentRequest: ContentRequest) {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -180,9 +177,9 @@ class HelpService(
         user?: throw UserNotFoundException("User not found.")
 
         val comment: HelpComment? = helpCommentRepository.findByCommentId(commentId)
-        comment?: throw CommentNotFoundException("Comments do not exist.")
+        comment?: throw ContentNotFoundException("Comments do not exist.")
 
-        helpCommentRepository.save(comment.updateComment(postCommentRequest.comment))
+        helpCommentRepository.save(comment.updateComment(contentRequest.content))
     }
 
     fun deleteHelp(bearerToken: String?, helpId: Int) {
@@ -206,7 +203,7 @@ class HelpService(
         user?: throw UserNotFoundException("User not found.")
 
         val comment: HelpComment? = helpCommentRepository.findByCommentId(commentId)
-        comment?: throw CommentNotFoundException("Comments do not exist.")
+        comment?: throw ContentNotFoundException("Comments do not exist.")
 
         helpCommentRepository.delete(comment)
     }
