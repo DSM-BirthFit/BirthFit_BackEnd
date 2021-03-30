@@ -34,4 +34,10 @@ class Qna(
 
     @OneToMany(mappedBy = "qnaId")
     private val likes: MutableList<QnaLike>? = null
-)
+) {
+
+    fun view(): Qna {
+        view++
+        return this
+    }
+}

@@ -1,16 +1,13 @@
 package com.birth.fit.service
 
-import com.birth.fit.domain.entity.Qna
-import com.birth.fit.domain.entity.User
+import com.birth.fit.domain.entity.*
 import com.birth.fit.domain.repository.QnaAnswerRepository
 import com.birth.fit.domain.repository.QnaLikeRepository
 import com.birth.fit.domain.repository.QnaRepository
 import com.birth.fit.domain.repository.UserRepository
-import com.birth.fit.dto.HelpListResponse
-import com.birth.fit.dto.PostRequest
-import com.birth.fit.dto.QnaListResponse
-import com.birth.fit.dto.QnaPageResponse
+import com.birth.fit.dto.*
 import com.birth.fit.exception.error.ExpiredTokenException
+import com.birth.fit.exception.error.PostNotFoundException
 import com.birth.fit.exception.error.UserNotFoundException
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,7 +54,46 @@ class QnaService(
         )
     }
 
-    fun getContent(bearerToken: String?, qnaId: Int) {
+    fun getContent(bearerToken: String?, qnaId: Int): QnaContentResponse {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not Found")
+
+        val author: User? = userRepository.findByEmail(qna.userEmail)
+
+        val list: MutableList<QnaAnswerResponse> = ArrayList()
+        val answer: MutableList<QnaAnswer>? = qnaAnswerRepository.findAllByQnaId(qnaId)
+        answer?.run {
+            this.forEach {
+                val writer: User = userRepository.findByEmail(it.userEmail)!!
+                list.add(
+                    QnaAnswerResponse(
+                        qnaId = it.qnaId,
+                        userId = writer.userId,
+                        content = it.content,
+                        isMine = writer.email == user.email
+                    )
+                )
+            }
+        }
+
+        qnaRepository.save(qna.view())
+        return QnaContentResponse(
+            title = qna.title,
+            content = qna.content,
+            userId = author!!.userId,
+            createdAt = qna.createdAt,
+            view = qna.view,
+            like = qna.likeCount,
+            isMine = user.email == author.email,
+            isLike = qnaLikeRepository.findByQnaIdAndUserEmail(qnaId, user.email) != null,
+            answer = list
+        )
     }
 
     fun write(bearerToken: String?, postRequest: PostRequest) {

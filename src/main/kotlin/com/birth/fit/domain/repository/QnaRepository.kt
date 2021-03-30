@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface QnaRepository: JpaRepository<Qna, Int>
+interface QnaRepository: JpaRepository<Qna, String> {
+    fun findById(id: Int): Qna?
+}
