@@ -87,7 +87,7 @@ class QnaService(
             title = qna.title,
             content = qna.content,
             userId = author!!.userId,
-            createdAt = qna.createdAt,
+            createdAt = qna.createdAt.toString(),
             view = qna.view,
             like = qna.likeCount,
             isMine = user.email == author.email,
