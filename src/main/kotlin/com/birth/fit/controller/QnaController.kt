@@ -1,6 +1,7 @@
 package com.birth.fit.controller
 
 import com.birth.fit.dto.PostRequest
+import com.birth.fit.dto.QnaContentResponse
 import com.birth.fit.dto.QnaPageResponse
 import com.birth.fit.service.QnaService
 import org.springframework.data.domain.Pageable
@@ -22,8 +23,8 @@ class QnaController(
 
     @GetMapping("/{qnaId}")
     fun getContent(@RequestHeader("Authorization") bearerToken: String?,
-                   @PathVariable @Validated qnaId: Int) {
-        qnaService.getContent(bearerToken, qnaId)
+                   @PathVariable @Validated qnaId: Int): QnaContentResponse {
+        return qnaService.getContent(bearerToken, qnaId)
     }
 
     @PostMapping
