@@ -66,4 +66,10 @@ class QnaController(
                   @PathVariable @Validated qnaId: Int) {
         qnaService.deleteQna(bearerToken, qnaId)
     }
+
+    @DeleteMapping("/answer/{answerId}")
+    fun deleteAnswer(@RequestHeader("Authorization") bearerToken: String?,
+                     @PathVariable @Validated answerId: Int) {
+        qnaService.deleteAnswer(bearerToken, answerId)
+    }
 }

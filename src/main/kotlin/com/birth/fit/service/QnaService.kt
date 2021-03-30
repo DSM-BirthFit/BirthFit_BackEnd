@@ -193,4 +193,17 @@ class QnaService(
 
         qnaRepository.delete(qna)
     }
+
+    fun deleteAnswer(bearerToken: String?, answerId: Int) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val answer: QnaAnswer? = qnaAnswerRepository.findByAnswerId(answerId)
+        answer?: throw ContentNotFoundException("Answer do not exist.")
+
+        qnaAnswerRepository.delete(answer)
+    }
 }
