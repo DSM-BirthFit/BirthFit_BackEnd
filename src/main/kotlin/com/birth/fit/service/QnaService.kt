@@ -113,6 +113,25 @@ class QnaService(
         )
     }
 
+    fun writeAnswer(bearerToken: String?, qnaId: Int, contentRequest: ContentRequest) {
+        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        val qna: Qna? = qnaRepository.findById(qnaId)
+        qna?: throw PostNotFoundException("Post not found.")
+
+        qnaAnswerRepository.save(
+            QnaAnswer(
+                qnaId = qnaId,
+                userEmail = user.email,
+                content = contentRequest.comment
+            )
+        )
+    }
+
     fun updateQna(bearerToken: String?, qnaId: Int, postRequest: PostRequest) {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
@@ -121,7 +140,7 @@ class QnaService(
         user?: throw UserNotFoundException("User not found.")
 
         val qna: Qna? = qnaRepository.findById(qnaId);
-        qna?: throw PostNotFoundException("Post not Found.")
+        qna?: throw PostNotFoundException("Post not found.")
 
         qnaRepository.save(qna.updateContent(postRequest))
     }
@@ -134,7 +153,7 @@ class QnaService(
         user?: throw UserNotFoundException("User not found.")
 
         val qna: Qna? = qnaRepository.findById(qnaId)
-        qna?: throw PostNotFoundException("Post not Found")
+        qna?: throw PostNotFoundException("Post not found")
 
         val like: QnaLike? =qnaLikeRepository.findByQnaIdAndUserEmail(qnaId, user.email)
         if(like == null) {
@@ -159,7 +178,7 @@ class QnaService(
         user?: throw UserNotFoundException("User not found.")
 
         val qna: Qna? = qnaRepository.findById(qnaId)
-        qna?: throw PostNotFoundException("Post not Found.")
+        qna?: throw PostNotFoundException("Post not found.")
 
         qnaRepository.delete(qna)
     }

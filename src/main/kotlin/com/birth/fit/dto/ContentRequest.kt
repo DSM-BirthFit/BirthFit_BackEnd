@@ -1,5 +1,5 @@
 package com.birth.fit.dto
 
-class PostCommentRequest(
+class ContentRequest(
     var comment: String
 )

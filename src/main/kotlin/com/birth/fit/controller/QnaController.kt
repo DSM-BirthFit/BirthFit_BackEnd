@@ -1,5 +1,6 @@
 package com.birth.fit.controller
 
+import com.birth.fit.dto.ContentRequest
 import com.birth.fit.dto.PostRequest
 import com.birth.fit.dto.QnaContentResponse
 import com.birth.fit.dto.QnaPageResponse
@@ -31,6 +32,13 @@ class QnaController(
     fun write(@RequestHeader("Authorization") bearerToken: String?,
               @RequestBody @Validated postRequest: PostRequest) {
         qnaService.write(bearerToken, postRequest)
+    }
+
+    @PostMapping("/answer/{qnaId}")
+    fun writeAnswer(@RequestHeader("Authorization") bearerToken: String?,
+                    @PathVariable @Validated qnaId: Int,
+                    @RequestBody @Validated contentRequest: ContentRequest) {
+        qnaService.writeAnswer(bearerToken, qnaId, contentRequest)
     }
 
     @PutMapping("/{qnaId}")
