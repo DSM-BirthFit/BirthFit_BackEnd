@@ -1,3 +1,3 @@
 package com.birth.fit.exception.error
 
-class CommentNotFoundException(msg: String?): RuntimeException(msg)
+class ContentNotFoundException(msg: String?): RuntimeException(msg)
