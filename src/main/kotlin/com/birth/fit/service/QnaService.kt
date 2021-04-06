@@ -87,7 +87,7 @@ class QnaService(
             userId = author.userId,
             createdAt = qna.createdAt.toString().substring(0, 10),
             view = qna.view,
-            like = qna.likeCount,
+            likeCount = qna.likeCount,
             isMine = user.email == author.email,
             isLike = qnaLikeRepository.findByUserEmailAndQnaId(user.email, qnaId)?.isPresent == true,
             answer = list
