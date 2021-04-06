@@ -88,8 +88,8 @@ class HelpService(
             userId = author.userId,
             createdAt = help.createdAt.toString().substring(0, 10),
             view = help.view,
-            like = help.likeCount,
-            isMine = user.email == author!!.email,
+            likeCount = help.likeCount,
+            isMine = user.email == author.email,
             isLike = helpLikeRepository.findByUserEmailAndHelpId(user.email, helpId)?.isPresent == true,
             comment = list
         )
