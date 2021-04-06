@@ -63,7 +63,7 @@ class HelpService(
         val help: Help? = helpRepository.findById(helpId)
         help?: throw PostNotFoundException("Post not Found")
 
-        val author: User? = userRepository.findByEmail(help.userEmail)
+        val author: User = userRepository.findByEmail(help.userEmail)!!
 
         val list: MutableList<HelpCommentResponse> = ArrayList()
         val comment: MutableList<HelpComment>? = helpCommentRepository.findAllByHelpId(helpId)
@@ -85,12 +85,12 @@ class HelpService(
         return HelpContentResponse(
             title = help.title,
             content = help.content,
-            userId = user.userId,
-            createdAt = help.createdAt.toString(),
+            userId = author.userId,
+            createdAt = help.createdAt.toString().substring(0, 10),
             view = help.view,
             like = help.likeCount,
             isMine = user.email == author!!.email,
-            isLike = helpLikeRepository.findByHelpIdAndUserEmail(helpId, user.email) != null,
+            isLike = helpLikeRepository.findByUserEmailAndHelpId(user.email, helpId)?.isPresent == true,
             comment = list
         )
     }
