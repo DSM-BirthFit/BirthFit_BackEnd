@@ -62,7 +62,7 @@ class QnaService(
         val qna: Qna? = qnaRepository.findById(qnaId)
         qna?: throw PostNotFoundException("Post not Found")
 
-        val author: User? = userRepository.findByEmail(qna.userEmail)
+        val author: User = userRepository.findByEmail(qna.userEmail)!!
 
         val list: MutableList<QnaAnswerResponse> = ArrayList()
         val answer: MutableList<QnaAnswer>? = qnaAnswerRepository.findAllByQnaId(qnaId)
@@ -71,7 +71,7 @@ class QnaService(
                 val writer: User = userRepository.findByEmail(it.userEmail)!!
                 list.add(
                     QnaAnswerResponse(
-                        qnaId = it.qnaId,
+                        qnaId = it.answerId!!,
                         userId = writer.userId,
                         content = it.content,
                         isMine = writer.email == user.email
@@ -84,12 +84,12 @@ class QnaService(
         return QnaContentResponse(
             title = qna.title,
             content = qna.content,
-            userId = author!!.userId,
-            createdAt = qna.createdAt.toString(),
+            userId = author.userId,
+            createdAt = qna.createdAt.toString().substring(0, 10),
             view = qna.view,
             like = qna.likeCount,
             isMine = user.email == author.email,
-            isLike = qnaLikeRepository.findByQnaIdAndUserEmail(qnaId, user.email) != null,
+            isLike = qnaLikeRepository.findByUserEmailAndQnaId(user.email, qnaId)?.isPresent == true,
             answer = list
         )
     }
