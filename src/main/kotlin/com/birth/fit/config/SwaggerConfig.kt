@@ -21,6 +21,7 @@ class SwaggerConfig: WebMvcConfigurer {
         return Docket(DocumentationType.SWAGGER_2)
             .useDefaultResponseMessages(false)
             .apiInfo(this.metaInfo())
+            .host("localhost:8080")
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.birth.fit.controller"))
             .paths(PathSelectors.any())
