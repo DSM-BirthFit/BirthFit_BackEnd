@@ -12,6 +12,11 @@ class UserController(
     @Autowired val userService: UserService
 ) {
 
+    @GetMapping("/userId")
+    fun checkUserId(@RequestParam("userId") userId: String): Boolean {
+        return userService.checkUserId(userId)
+    }
+
     @GetMapping("/profile")
     fun getProfile(@RequestHeader("Authorization") bearerToken: String): ProfileResponse {
         return userService.getProfile(bearerToken)
@@ -39,7 +44,7 @@ class UserController(
 
     @PutMapping("/profile")
     fun changeProfile(@RequestHeader("Authorization") bearerToken: String,
-                      @RequestBody @Validated profileRequest: ChangeProfileRequest) {
+                      @ModelAttribute @Validated profileRequest: ChangeProfileRequest) {
         userService.changeProfile(bearerToken, profileRequest)
     }
 }

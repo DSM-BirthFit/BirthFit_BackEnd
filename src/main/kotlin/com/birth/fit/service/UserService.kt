@@ -9,15 +9,25 @@ import com.birth.fit.exception.error.*
 import com.birth.fit.util.AES256Util
 import com.birth.fit.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.io.File
+import java.util.*
 
 @Service
 class UserService(
-    @Autowired val userRepository: UserRepository,
-    @Autowired val emailRepository: EmailRepository,
-    @Autowired val jwtTokenProvider: JwtTokenProvider,
-    @Autowired val aes256Util: AES256Util
+    @Value("\${image.upload.dir}")
+    private val imageDirPath: String,
+
+    @Autowired private val userRepository: UserRepository,
+    @Autowired private val emailRepository: EmailRepository,
+    @Autowired private val jwtTokenProvider: JwtTokenProvider,
+    @Autowired private val aes256Util: AES256Util
 ) {
+
+    fun checkUserId(userId: String): Boolean {
+        return userRepository.existsByUserId(userId)
+    }
 
     fun getProfile(bearerToken: String): ProfileResponse {
         val token: String? = jwtTokenProvider.resolveToken(bearerToken)
@@ -38,10 +48,6 @@ class UserService(
             .orElseThrow {
                 InvalidAuthEmailException("This email is not authenticated.")
             }
-
-        userRepository.existsByUserId(joinRequest.userId)?.run {
-            throw UserAlreadyExistException("UserId Already Exists.")
-        }
 
         joinRequest.password = aes256Util.aesEncode(joinRequest.password)
         userRepository.save(joinRequest.getData(joinRequest))
@@ -105,6 +111,16 @@ class UserService(
         }
 
         profileRequest.password?.let { user.password = aes256Util.aesEncode(profileRequest.password) }
+
+        profileRequest.image?.run {
+            val imageName: String = UUID.randomUUID().toString()
+
+            user.image?.let {
+                File(imageDirPath, it).delete()
+            }
+
+            user.image = imageName
+        }
 
         userRepository.save(user)
     }
