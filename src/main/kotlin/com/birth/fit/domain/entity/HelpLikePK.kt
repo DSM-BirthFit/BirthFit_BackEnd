@@ -4,8 +4,8 @@ import java.io.Serializable
 
 class HelpLikePK(
 
-    private var userEmail: String,
-    private var helpId: Int
+    private var userEmail: String = "",
+    private var helpId: Int = 0
 ): Serializable {
     private val serialVersionUID: Long = 1L
 

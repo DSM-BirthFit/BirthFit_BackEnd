@@ -4,6 +4,7 @@ class HelpContentResponse(
     val title: String,
     val content: String,
     val userId: String,
+    val userImage: String?,
     val createdAt: String,
     val view: Int,
     val likeCount: Int,

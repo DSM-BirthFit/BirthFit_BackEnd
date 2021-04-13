@@ -4,7 +4,10 @@ import com.birth.fit.domain.entity.Help
 import com.birth.fit.domain.entity.HelpComment
 import com.birth.fit.domain.entity.HelpLike
 import com.birth.fit.domain.entity.User
-import com.birth.fit.domain.repository.*
+import com.birth.fit.domain.repository.HelpCommentRepository
+import com.birth.fit.domain.repository.HelpLikeRepository
+import com.birth.fit.domain.repository.HelpRepository
+import com.birth.fit.domain.repository.UserRepository
 import com.birth.fit.dto.*
 import com.birth.fit.exception.error.ContentNotFoundException
 import com.birth.fit.exception.error.ExpiredTokenException
@@ -15,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import kotlin.collections.ArrayList
+import java.time.LocalDate
 
 @Service
 class HelpService(
@@ -67,18 +69,17 @@ class HelpService(
 
         val list: MutableList<HelpCommentResponse> = ArrayList()
         val comment: MutableList<HelpComment>? = helpCommentRepository.findAllByHelpId(helpId)
-        comment?.run {
-            this.forEach {
-                val writer: User = userRepository.findByEmail(it.userEmail)!!
-                list.add(
-                    HelpCommentResponse(
-                        commentId = it.commentId!!,
-                        userId = writer.userId,
-                        content = it.content,
-                        isMine = writer.email == user.email
-                    )
+        comment?.forEach {
+            val writer: User = userRepository.findByEmail(it.userEmail)!!
+            list.add(
+                HelpCommentResponse(
+                    commentId = it.commentId!!,
+                    userId = writer.userId,
+                    userImage = writer.image,
+                    content = it.content,
+                    isMine = writer.email == user.email
                 )
-            }
+            )
         }
 
         helpRepository.save(help.view())
@@ -86,7 +87,8 @@ class HelpService(
             title = help.title,
             content = help.content,
             userId = author.userId,
-            createdAt = help.createdAt.toString().substring(0, 10),
+            userImage = author.image,
+            createdAt = help.createdAt.toString(),
             view = help.view,
             likeCount = help.likeCount,
             isMine = user.email == author.email,
@@ -107,7 +109,7 @@ class HelpService(
                 userEmail = user.email,
                 title = postRequest.title,
                 content = postRequest.content,
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDate.now()
             )
         )
     }
