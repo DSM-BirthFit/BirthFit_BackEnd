@@ -1,7 +1,7 @@
 package com.birth.fit.domain.entity
 
 import com.birth.fit.dto.PostRequest
-import java.time.LocalDateTime
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -22,7 +22,7 @@ class Qna(
     internal var content: String,
 
     @Column(name = "created_at")
-    internal val createdAt: LocalDateTime,
+    internal val createdAt: LocalDate,
 
     @Column(name = "view")
     internal var view: Int = 0,

@@ -4,8 +4,8 @@ import java.io.Serializable
 
 class QnaLikePK(
 
-    private var userEmail: String,
-    private var qnaId: Int
+    private var userEmail: String = "",
+    private var qnaId: Int = 0
 ): Serializable {
     private val serialVersionUID: Long = 1L
 
