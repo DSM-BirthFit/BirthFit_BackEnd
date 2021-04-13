@@ -39,6 +39,10 @@ class UserService(
                 InvalidAuthEmailException("This email is not authenticated.")
             }
 
+        userRepository.existsByUserId(joinRequest.userId)?.run {
+            throw UserAlreadyExistException("UserId Already Exists.")
+        }
+
         joinRequest.password = aes256Util.aesEncode(joinRequest.password)
         userRepository.save(joinRequest.getData(joinRequest))
     }
