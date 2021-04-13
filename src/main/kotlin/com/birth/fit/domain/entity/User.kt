@@ -16,6 +16,9 @@ class User(
     @Column(name = "password")
     internal var password: String,
 
+    @Column(name = "image")
+    internal var image: String? = null,
+
     @OneToMany(mappedBy = "userEmail")
     private val help: MutableList<Help>? = null,
 
