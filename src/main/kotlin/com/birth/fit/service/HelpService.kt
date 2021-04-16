@@ -36,18 +36,17 @@ class HelpService(
         val helps: Page<Help> = helpRepository.findAll(pageable)
         val list: MutableList<HelpListResponse> = ArrayList()
 
-        helps.let {
-            for(help in it) {
-                list.add(
-                    HelpListResponse(
-                        helpId = help.id!!,
-                        title = help.title,
-                        comment = helpCommentRepository.countByHelpId(help.id!!),
-                        like = help.likeCount
-                    )
+        helps.forEach {
+            list.add(
+                HelpListResponse(
+                    helpId = it.id!!,
+                    title = it.title,
+                    comment = helpCommentRepository.countByHelpId(it.id!!),
+                    like = it.likeCount
                 )
-            }
+            )
         }
+
         return HelpPageResponse(
             totalElement = helps.totalElements.toInt(),
             totalPage = helps.totalPages,

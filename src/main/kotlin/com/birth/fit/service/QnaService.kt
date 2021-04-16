@@ -39,18 +39,17 @@ class QnaService(
         val qnaList: Page<Qna> = qnaRepository.findAll(pageable)
         val list: MutableList<QnaListResponse> = ArrayList()
 
-        qnaList.let {
-            for(qna in it) {
-                list.add(
-                    QnaListResponse(
-                        qnaId = qna.id!!,
-                        title = qna.title,
-                        answer = qnaAnswerRepository.countByQnaId(qna.id!!),
-                        like = qna.likeCount
-                    )
+        qnaList.forEach {
+            list.add(
+                QnaListResponse(
+                    qnaId = it.id!!,
+                    title = it.title,
+                    answer = qnaAnswerRepository.countByQnaId(it.id!!),
+                    like = it.likeCount
                 )
-            }
+            )
         }
+        
         return QnaPageResponse(
             totalElement = qnaList.totalElements.toInt(),
             totalPage = qnaList.totalPages,
