@@ -49,7 +49,7 @@ class QnaService(
                 )
             )
         }
-        
+
         return QnaPageResponse(
             totalElement = qnaList.totalElements.toInt(),
             totalPage = qnaList.totalPages,
