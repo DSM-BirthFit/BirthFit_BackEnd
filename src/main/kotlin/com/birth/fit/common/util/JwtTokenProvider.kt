@@ -1,13 +1,16 @@
 package com.birth.fit.common.util
 
-import com.birth.fit.common.exception.error.InvalidTokenException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.*
+import javax.servlet.http.HttpServletRequest
+
 
 @Component
 class JwtTokenProvider(
@@ -62,10 +65,11 @@ class JwtTokenProvider(
             .body.subject
     }
 
-    fun resolveToken(bearerToken: String?): String? {
-        bearerToken?: throw InvalidTokenException("Token does not exist.")
+    fun resolveToken(req: HttpServletRequest): String? {
+        val bearerToken: String? = req.getHeader("Authorization")
+        bearerToken?: return null
 
-        if(!bearerToken.startsWith(prefix)) throw InvalidTokenException("Token type is not a bearer.")
+        if(!bearerToken.startsWith("Bearer ")) return null
 
         return bearerToken.substring(7, bearerToken.length)
     }
@@ -83,5 +87,11 @@ class JwtTokenProvider(
     fun getType(token: String): Any? {
         val claims: Jws<Claims> = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
         return claims.body["type"]
+    }
+
+    fun getToken(header: String): String? {
+        val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
+        val token = request.getHeader(header)
+        return token.substring(7)
     }
 }
