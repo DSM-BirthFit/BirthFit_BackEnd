@@ -23,7 +23,7 @@ class SwaggerConfig: WebMvcConfigurer {
             .apiInfo(this.metaInfo())
             .host("localhost:8080")
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.birth.fit.controller"))
+            .apis(RequestHandlerSelectors.basePackage("com.birth.fit.domain"))
             .paths(PathSelectors.any())
             .build()
     }
