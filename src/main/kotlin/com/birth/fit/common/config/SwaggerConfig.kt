@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @Suppress("DEPRECATION")
 @Configuration
 @EnableSwagger2
-class SwaggerConfig: WebMvcConfigurer {
+class SwaggerConfig {
 
     @Bean
     fun productApi(): Docket {
@@ -38,12 +38,5 @@ class SwaggerConfig: WebMvcConfigurer {
             "License",
             "License URL"
         )
-    }
-
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("swagger-ui.html")
-            .addResourceLocations("classpath:/META-INF/resources/")
-        registry.addResourceHandler("/webjars/**")
-            .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
 }
