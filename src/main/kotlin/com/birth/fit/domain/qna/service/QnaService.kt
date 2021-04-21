@@ -29,8 +29,8 @@ class QnaService(
     @Autowired private val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    fun getList(bearerToken: String?, pageable: Pageable): QnaPageResponse? {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun getList(pageable: Pageable): QnaPageResponse? {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -57,8 +57,8 @@ class QnaService(
         )
     }
 
-    fun getContent(bearerToken: String?, qnaId: Int): QnaContentResponse {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun getContent(qnaId: Int): QnaContentResponse {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -99,8 +99,8 @@ class QnaService(
         )
     }
 
-    fun write(bearerToken: String?, qnaPostRequest: QnaPostRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun write(qnaPostRequest: QnaPostRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -116,8 +116,8 @@ class QnaService(
         )
     }
 
-    fun writeAnswer(bearerToken: String?, qnaId: Int, qnaAnswerRequest: QnaAnswerRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun writeAnswer(qnaId: Int, qnaAnswerRequest: QnaAnswerRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -135,8 +135,8 @@ class QnaService(
         )
     }
 
-    fun updateQna(bearerToken: String?, qnaId: Int, qnaPostRequest: QnaPostRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun updateQna(qnaId: Int, qnaPostRequest: QnaPostRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -148,8 +148,8 @@ class QnaService(
         qnaRepository.save(qna.updateContent(qnaPostRequest))
     }
 
-    fun like(bearerToken: String?, qnaId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun like(qnaId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -173,8 +173,8 @@ class QnaService(
         }
     }
 
-    fun updateAnswer(bearerToken: String?, answerId: Int, qnaAnswerRequest: QnaAnswerRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun updateAnswer(answerId: Int, qnaAnswerRequest: QnaAnswerRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -186,8 +186,8 @@ class QnaService(
         qnaAnswerRepository.save(answer.updateAnswer(qnaAnswerRequest.answer))
     }
 
-    fun deleteQna(bearerToken: String?, qnaId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun deleteQna(qnaId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -199,8 +199,8 @@ class QnaService(
         qnaRepository.delete(qna)
     }
 
-    fun deleteAnswer(bearerToken: String?, answerId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun deleteAnswer(answerId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))

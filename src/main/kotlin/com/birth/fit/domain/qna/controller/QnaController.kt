@@ -17,59 +17,50 @@ class QnaController(
 ) {
 
     @GetMapping
-    fun getList(@RequestHeader("Authorization") bearerToken: String?,
-                @PageableDefault(size = 10) pageable: Pageable): QnaPageResponse? {
-        return qnaService.getList(bearerToken, pageable)
+    fun getList(@PageableDefault(size = 10) pageable: Pageable): QnaPageResponse? {
+        return qnaService.getList(pageable)
     }
 
     @GetMapping("/{qnaId}")
-    fun getContent(@RequestHeader("Authorization") bearerToken: String?,
-                   @PathVariable @Validated qnaId: Int): QnaContentResponse {
-        return qnaService.getContent(bearerToken, qnaId)
+    fun getContent(@PathVariable @Validated qnaId: Int): QnaContentResponse {
+        return qnaService.getContent(qnaId)
     }
 
     @PostMapping
-    fun write(@RequestHeader("Authorization") bearerToken: String?,
-              @RequestBody @Validated qnaPostRequest: QnaPostRequest) {
-        qnaService.write(bearerToken, qnaPostRequest)
+    fun write(@RequestBody @Validated qnaPostRequest: QnaPostRequest) {
+        qnaService.write(qnaPostRequest)
     }
 
     @PostMapping("/answer/{qnaId}")
-    fun writeAnswer(@RequestHeader("Authorization") bearerToken: String?,
-                    @PathVariable @Validated qnaId: Int,
+    fun writeAnswer(@PathVariable @Validated qnaId: Int,
                     @RequestBody @Validated qnaAnswerRequest: QnaAnswerRequest) {
-        qnaService.writeAnswer(bearerToken, qnaId, qnaAnswerRequest)
+        qnaService.writeAnswer(qnaId, qnaAnswerRequest)
     }
 
     @PutMapping("/{qnaId}")
-    fun updateQna(@RequestHeader("Authorization") bearerToken: String?,
-                  @PathVariable @Validated qnaId: Int,
+    fun updateQna(@PathVariable @Validated qnaId: Int,
                   @RequestBody @Validated qnaPostRequest: QnaPostRequest) {
-        qnaService.updateQna(bearerToken, qnaId, qnaPostRequest)
+        qnaService.updateQna(qnaId, qnaPostRequest)
     }
 
     @PutMapping("/{qnaId}/like")
-    fun like(@RequestHeader("Authorization") bearerToken: String?,
-             @PathVariable @Validated qnaId: Int) {
-        qnaService.like(bearerToken, qnaId)
+    fun like(@PathVariable @Validated qnaId: Int) {
+        qnaService.like(qnaId)
     }
 
     @PutMapping("/answer/{answerId}")
-    fun updateAnswer(@RequestHeader("Authorization") bearerToken: String?,
-                     @PathVariable @Validated answerId: Int,
+    fun updateAnswer(@PathVariable @Validated answerId: Int,
                      @RequestBody @Validated qnaAnswerRequest: QnaAnswerRequest) {
-        qnaService.updateAnswer(bearerToken, answerId, qnaAnswerRequest)
+        qnaService.updateAnswer(answerId, qnaAnswerRequest)
     }
 
     @DeleteMapping("/{qnaId}")
-    fun deleteQna(@RequestHeader("Authorization") bearerToken: String?,
-                  @PathVariable @Validated qnaId: Int) {
-        qnaService.deleteQna(bearerToken, qnaId)
+    fun deleteQna(@PathVariable @Validated qnaId: Int) {
+        qnaService.deleteQna(qnaId)
     }
 
     @DeleteMapping("/answer/{answerId}")
-    fun deleteAnswer(@RequestHeader("Authorization") bearerToken: String?,
-                     @PathVariable @Validated answerId: Int) {
-        qnaService.deleteAnswer(bearerToken, answerId)
+    fun deleteAnswer(@PathVariable @Validated answerId: Int) {
+        qnaService.deleteAnswer(answerId)
     }
 }
