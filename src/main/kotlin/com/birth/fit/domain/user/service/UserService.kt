@@ -29,8 +29,8 @@ class UserService(
         return userRepository.existsByUserId(userId)
     }
 
-    fun getProfile(bearerToken: String): ProfileResponse {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun getProfile(): ProfileResponse {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -67,8 +67,8 @@ class UserService(
         return tokenResponse(user.email)
     }
 
-    fun refreshToken(refreshToken: String?): TokenResponse {
-        val token: String? = jwtTokenProvider.resolveToken(refreshToken)
+    fun refreshToken(): TokenResponse {
+        val token: String? = jwtTokenProvider.getToken("X-Refresh-Token")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         if(jwtTokenProvider.getType(token) != "refresh_token") throw InvalidTokenException("Token type error.")
@@ -98,8 +98,8 @@ class UserService(
         userRepository.save(user)
     }
 
-    fun changeProfile(bearerToken: String, profileRequest: ChangeProfileRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun changeProfile(profileRequest: ChangeProfileRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))

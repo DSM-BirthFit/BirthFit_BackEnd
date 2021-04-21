@@ -18,8 +18,8 @@ class UserController(
     }
 
     @GetMapping("/profile")
-    fun getProfile(@RequestHeader("Authorization") bearerToken: String): ProfileResponse {
-        return userService.getProfile(bearerToken)
+    fun getProfile(): ProfileResponse {
+        return userService.getProfile()
     }
 
     @PostMapping("/join")
@@ -33,8 +33,8 @@ class UserController(
     }
 
     @PutMapping
-    fun refreshToken(@RequestHeader("X-Refresh-Token") refreshToken: String?): TokenResponse {
-        return userService.refreshToken(refreshToken)
+    fun refreshToken(): TokenResponse {
+        return userService.refreshToken()
     }
 
     @PutMapping("/password")
@@ -43,9 +43,8 @@ class UserController(
     }
 
     @PutMapping("/profile")
-    fun changeProfile(@RequestHeader("Authorization") bearerToken: String,
-                      @ModelAttribute @Validated profileRequest: ChangeProfileRequest
+    fun changeProfile(@ModelAttribute @Validated profileRequest: ChangeProfileRequest
     ) {
-        userService.changeProfile(bearerToken, profileRequest)
+        userService.changeProfile(profileRequest)
     }
 }
