@@ -19,59 +19,50 @@ class HelpController(
 ) {
 
     @GetMapping
-    fun getList(@RequestHeader("Authorization") bearerToken: String?,
-                @PageableDefault(size = 10) pageable: Pageable): HelpPageResponse? {
-        return helpService.getList(bearerToken, pageable)
+    fun getList(@PageableDefault(size = 10) pageable: Pageable): HelpPageResponse? {
+        return helpService.getList(pageable)
     }
 
     @GetMapping("/{helpId}")
-    fun getContent(@RequestHeader("Authorization") bearerToken: String?,
-                   @PathVariable @Validated helpId: Int): HelpContentResponse? {
-        return helpService.getContent(bearerToken, helpId)
+    fun getContent(@PathVariable @Validated helpId: Int): HelpContentResponse? {
+        return helpService.getContent(helpId)
     }
 
     @PostMapping
-    fun write(@RequestHeader("Authorization") bearerToken: String?,
-              @RequestBody @Validated helpPostRequest: HelpPostRequest) {
-        return helpService.write(bearerToken, helpPostRequest)
+    fun write(@RequestBody @Validated helpPostRequest: HelpPostRequest) {
+        return helpService.write(helpPostRequest)
     }
 
     @PostMapping("/comment/{helpId}")
-    fun writeComment(@RequestHeader("Authorization") bearerToken: String?,
-                     @PathVariable @Validated helpId: Int,
+    fun writeComment(@PathVariable @Validated helpId: Int,
                      @RequestBody @Validated helpCommentRequest: HelpCommentRequest) {
-        helpService.writeComment(bearerToken, helpId, helpCommentRequest)
+        helpService.writeComment(helpId, helpCommentRequest)
     }
 
     @PutMapping("/{helpId}")
-    fun updateHelp(@RequestHeader("Authorization") bearerToken: String?,
-                   @PathVariable @Validated helpId: Int,
+    fun updateHelp(@PathVariable @Validated helpId: Int,
                    @RequestBody @Validated helpPostRequest: HelpPostRequest) {
-        helpService.updateHelp(bearerToken, helpId, helpPostRequest)
+        helpService.updateHelp(helpId, helpPostRequest)
     }
 
     @PutMapping("/{helpId}/like")
-    fun like(@RequestHeader("Authorization") bearerToken: String?,
-             @PathVariable @Validated helpId: Int) {
-        helpService.like(bearerToken, helpId)
+    fun like(@PathVariable @Validated helpId: Int) {
+        helpService.like(helpId)
     }
 
     @PutMapping("/comment/{commentId}")
-    fun updateComment(@RequestHeader("Authorization") bearerToken: String?,
-                      @PathVariable @Validated commentId: Int,
+    fun updateComment(@PathVariable @Validated commentId: Int,
                       @RequestBody @Validated helpCommentRequest: HelpCommentRequest) {
-        helpService.updateComment(bearerToken, commentId, helpCommentRequest)
+        helpService.updateComment(commentId, helpCommentRequest)
     }
 
     @DeleteMapping("/{helpId}")
-    fun deleteHelp(@RequestHeader("Authorization") bearerToken: String?,
-                   @PathVariable @Validated helpId: Int) {
-        helpService.deleteHelp(bearerToken, helpId)
+    fun deleteHelp(@PathVariable @Validated helpId: Int) {
+        helpService.deleteHelp(helpId)
     }
 
     @DeleteMapping("/comment/{commentId}")
-    fun deleteComment(@RequestHeader("Authorization") bearerToken: String?,
-                      @PathVariable @Validated commentId: Int) {
-        helpService.deleteComment(bearerToken, commentId)
+    fun deleteComment(@PathVariable @Validated commentId: Int) {
+        helpService.deleteComment(commentId)
     }
 }

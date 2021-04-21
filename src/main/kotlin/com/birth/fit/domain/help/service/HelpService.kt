@@ -29,8 +29,8 @@ class HelpService(
     @Autowired val jwtTokenProvider: JwtTokenProvider
 ) {
 
-    fun getList(bearerToken: String?, pageable: Pageable): HelpPageResponse? {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun getList(pageable: Pageable): HelpPageResponse? {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val helps: Page<Help> = helpRepository.findAll(pageable)
@@ -54,8 +54,8 @@ class HelpService(
         )
     }
 
-    fun getContent(bearerToken: String?, helpId: Int): HelpContentResponse? {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun getContent(helpId: Int): HelpContentResponse? {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -96,8 +96,8 @@ class HelpService(
         )
     }
 
-    fun write(bearerToken: String?, helpPostRequest: HelpPostRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun write(helpPostRequest: HelpPostRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -113,8 +113,8 @@ class HelpService(
         )
     }
 
-    fun writeComment(bearerToken: String?, helpId: Int, helpCommentRequest: HelpCommentRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun writeComment(helpId: Int, helpCommentRequest: HelpCommentRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -132,8 +132,8 @@ class HelpService(
         )
     }
 
-    fun updateHelp(bearerToken: String?, helpId: Int, helpPostRequest: HelpPostRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun updateHelp(helpId: Int, helpPostRequest: HelpPostRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -145,8 +145,8 @@ class HelpService(
         helpRepository.save(help.updateContent(helpPostRequest))
     }
 
-    fun like(bearerToken: String?, helpId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun like(helpId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -170,8 +170,8 @@ class HelpService(
         }
     }
 
-    fun updateComment(bearerToken: String?, commentId: Int, helpCommentRequest: HelpCommentRequest) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun updateComment(commentId: Int, helpCommentRequest: HelpCommentRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -183,8 +183,8 @@ class HelpService(
         helpCommentRepository.save(comment.updateComment(helpCommentRequest.comment))
     }
 
-    fun deleteHelp(bearerToken: String?, helpId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun deleteHelp(helpId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
@@ -196,8 +196,8 @@ class HelpService(
         helpRepository.delete(help)
     }
 
-    fun deleteComment(bearerToken: String?, commentId: Int) {
-        val token: String? = jwtTokenProvider.resolveToken(bearerToken)
+    fun deleteComment(commentId: Int) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
