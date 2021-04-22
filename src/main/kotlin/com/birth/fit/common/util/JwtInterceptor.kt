@@ -1,5 +1,6 @@
 package com.birth.fit.common.util
 
+import com.birth.fit.common.exception.error.InvalidTokenException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
@@ -13,18 +14,16 @@ class JwtInterceptor(
 ): HandlerInterceptor {
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        if (handler !is HandlerMethod) { return true; }
-
         val token: String? = jwtTokenProvider.resolveToken(request)
-        if(token != null && jwtTokenProvider.validateToken(token)) {
-            return true
+        return if(token != null && jwtTokenProvider.validateToken(token)) {
+            true
         } else {
-            val refreshToken: String? = request.getHeader("X-RefreshToken")?.substring(7)
+            val refreshToken: String? = request.getHeader("X-Refresh-Token")?.substring(7)
             if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
-                return true
+                true
+            } else {
+                throw InvalidTokenException("Token is invalid.")
             }
         }
-
-        return false
     }
 }
