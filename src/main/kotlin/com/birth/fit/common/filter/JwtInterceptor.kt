@@ -1,9 +1,8 @@
-package com.birth.fit.common.util
+package com.birth.fit.common.filter
 
-import com.birth.fit.common.exception.error.InvalidTokenException
+import com.birth.fit.common.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
