@@ -37,8 +37,9 @@ class UserService(
         user?: throw UserNotFoundException("User not found.")
 
         return ProfileResponse(
-            user.email,
-            user.userId
+            email = user.email,
+            userId = user.userId,
+            image = user.image
         )
     }
 
