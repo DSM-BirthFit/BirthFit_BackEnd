@@ -10,5 +10,5 @@ class HelpContentResponse(
     val likeCount: Int,
     val isMine: Boolean,
     val isLike: Boolean,
-    val comment: MutableList<HelpCommentResponse>
+    val comment: List<HelpCommentResponse>?
 )
