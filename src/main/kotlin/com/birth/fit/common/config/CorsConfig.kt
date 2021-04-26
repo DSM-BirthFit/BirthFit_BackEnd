@@ -27,7 +27,7 @@ class CorsConfig(
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(jwtInterceptor)
-            .addPathPatterns("/*")
+            .addPathPatterns("/**")
             .excludePathPatterns("/user/join")
             .excludePathPatterns("/user/login")
             .excludePathPatterns("/user/password")
