@@ -19,11 +19,7 @@ class JwtInterceptor(
             true
         } else {
             val refreshToken: String? = request.getHeader("X-Refresh-Token")?.substring(7)
-            if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
-                true
-            } else {
-                throw InvalidTokenException("Token is invalid.")
-            }
+            refreshToken != null && jwtTokenProvider.validateToken(refreshToken)
         }
     }
 }
