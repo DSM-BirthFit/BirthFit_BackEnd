@@ -4,6 +4,8 @@ import com.birth.fit.domain.help.domain.entity.Help
 import com.birth.fit.domain.help.domain.entity.HelpComment
 import com.birth.fit.domain.help.domain.entity.HelpLike
 import com.birth.fit.domain.qna.domain.entity.Qna
+import com.birth.fit.domain.qna.domain.entity.QnaAnswer
+import com.birth.fit.domain.qna.domain.entity.QnaLike
 import javax.persistence.*
 
 @Entity
@@ -33,5 +35,11 @@ class User(
     private val comment: MutableList<HelpComment>? = null,
 
     @OneToMany(mappedBy = "userEmail")
-    private val qna: MutableList<Qna>? = null
+    private val qna: MutableList<Qna>? = null,
+
+    @OneToMany(mappedBy = "userEmail")
+    private val qnaLike: MutableList<QnaLike>? = null,
+
+    @OneToMany(mappedBy = "userEmail")
+    private val answer: MutableList<QnaAnswer>? = null
 )

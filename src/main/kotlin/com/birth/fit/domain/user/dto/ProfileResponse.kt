@@ -1,6 +1,7 @@
 package com.birth.fit.domain.user.dto
 
 class ProfileResponse(
-    var email: String,
-    var userId: String
+    val email: String,
+    val userId: String,
+    val image: String?
 )
