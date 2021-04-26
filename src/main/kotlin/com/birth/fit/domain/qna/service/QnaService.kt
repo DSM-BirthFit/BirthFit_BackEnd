@@ -69,21 +69,6 @@ class QnaService(
 
         val author: User = userRepository.findByEmail(qna.userEmail)!!
 
-        val list: MutableList<QnaAnswerResponse> = ArrayList()
-        val answer: MutableList<QnaAnswer>? = qnaAnswerRepository.findAllByQnaId(qnaId)
-        answer?.forEach {
-            val writer: User = userRepository.findByEmail(it.userEmail)!!
-            list.add(
-                QnaAnswerResponse(
-                    qnaId = it.answerId!!,
-                    userId = writer.userId,
-                    userImage = writer.image,
-                    answer = it.answer,
-                    isMine = writer.email == user.email
-                )
-            )
-        }
-
         qnaRepository.save(qna.view())
         return QnaContentResponse(
             title = qna.title,
@@ -95,7 +80,16 @@ class QnaService(
             likeCount = qna.likeCount,
             isMine = user.email == author.email,
             isLike = qnaLikeRepository.findByUserEmailAndQnaId(user.email, qnaId)?.isPresent == true,
-            answer = list
+            answer = qnaAnswerRepository.findAllByQnaId(qnaId)?.map {
+                val writer: User = userRepository.findByEmail(it.userEmail)!!
+                QnaAnswerResponse(
+                    qnaId = it.qnaId,
+                    userId = writer.userId,
+                    userImage = writer.image,
+                    answer = it.answer,
+                    isMine = writer.email == user.email
+                )
+            }
         )
     }
 
