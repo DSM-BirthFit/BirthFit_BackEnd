@@ -10,5 +10,5 @@ class QnaContentResponse(
     val likeCount: Int,
     val isMine: Boolean,
     val isLike: Boolean,
-    val answer: MutableList<QnaAnswerResponse>
+    val answer: List<QnaAnswerResponse>?
 )
