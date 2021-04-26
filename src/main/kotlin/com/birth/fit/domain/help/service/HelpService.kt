@@ -66,21 +66,6 @@ class HelpService(
 
         val author: User = userRepository.findByEmail(help.userEmail)!!
 
-        val list: MutableList<HelpCommentResponse> = ArrayList()
-        val comment: MutableList<HelpComment>? = helpCommentRepository.findAllByHelpId(helpId)
-        comment?.forEach {
-            val writer: User = userRepository.findByEmail(it.userEmail)!!
-            list.add(
-                HelpCommentResponse(
-                    commentId = it.commentId!!,
-                    userId = writer.userId,
-                    userImage = writer.image,
-                    comment = it.comment,
-                    isMine = writer.email == user.email
-                )
-            )
-        }
-
         helpRepository.save(help.view())
         return HelpContentResponse(
             title = help.title,
@@ -92,7 +77,16 @@ class HelpService(
             likeCount = help.likeCount,
             isMine = user.email == author.email,
             isLike = helpLikeRepository.findByUserEmailAndHelpId(user.email, helpId)?.isPresent == true,
-            comment = list
+            comment = helpCommentRepository.findAllByHelpId(helpId)?.map {
+                    val writer: User = userRepository.findByEmail(it.userEmail)!!
+                    HelpCommentResponse(
+                        commentId = it.commentId!!,
+                        userId = writer.userId,
+                        userImage = writer.image,
+                        comment = it.comment,
+                        isMine = writer.email == user.email
+                    )
+                }
         )
     }
 
