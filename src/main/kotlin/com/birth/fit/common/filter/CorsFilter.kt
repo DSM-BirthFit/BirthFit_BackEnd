@@ -1,4 +1,4 @@
-package com.birth.fit.common.config
+package com.birth.fit.common.filter
 
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter

@@ -1,6 +1,6 @@
 package com.birth.fit.common.config
 
-import com.birth.fit.common.util.JwtInterceptor
+import com.birth.fit.common.filter.JwtInterceptor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.*
