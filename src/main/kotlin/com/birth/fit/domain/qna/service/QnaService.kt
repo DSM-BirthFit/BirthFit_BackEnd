@@ -68,8 +68,8 @@ class QnaService(
         qna?: throw PostNotFoundException("Post not Found")
 
         val author: User = userRepository.findByEmail(qna.userEmail)!!
-
         qnaRepository.save(qna.view())
+        
         return QnaContentResponse(
             title = qna.title,
             content = qna.content,
