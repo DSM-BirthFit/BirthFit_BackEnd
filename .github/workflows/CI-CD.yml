@@ -22,6 +22,7 @@ jobs:
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
       JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
       JWT_ACCESS: ${{ secrets.JWT_ACCESS }}
+      JWT_REFRESH: ${{ secrets.JWT_REFRESH }}
       USER_SECRET: ${{ secrets.USER_SECRET }}
       BIRTHFIT_DIR: ${{ secrets.BIRTHFIT_DIR }}
 
@@ -52,6 +53,7 @@ jobs:
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
       JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
       JWT_ACCESS: ${{ secrets.JWT_ACCESS }}
+      JWT_REFRESH: ${{ secrets.JWT_REFRESH }}
       USER_SECRET: ${{ secrets.USER_SECRET }}
       BIRTHFIT_DIR: ${{ secrets.BIRTHFIT_DIR }}
     
