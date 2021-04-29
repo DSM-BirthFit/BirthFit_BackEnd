@@ -20,7 +20,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: run test
-      run: ./gradlew test
+      run: ./gradlew test --info
 
     - name: run build
       run: ./gradlew clean build -x test
