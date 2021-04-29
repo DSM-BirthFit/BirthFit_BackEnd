@@ -55,7 +55,3 @@ auth:
 user:
   secret:
     key: ${USER_SECRET}
-
-image:
-  upload:
-    dir: ${BIRTHFIT_DIR}
