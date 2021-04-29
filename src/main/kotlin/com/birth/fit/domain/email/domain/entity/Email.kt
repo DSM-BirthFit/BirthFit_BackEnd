@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.TimeToLive
 
 @RedisHash(timeToLive = 60 * 3)
 class Email(
+
     @Id
     private val email: String,
     internal val code: String,
