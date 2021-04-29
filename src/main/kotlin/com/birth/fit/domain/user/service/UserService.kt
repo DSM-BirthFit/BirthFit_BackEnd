@@ -1,24 +1,20 @@
 package com.birth.fit.domain.user.service
 
-import com.birth.fit.domain.email.domain.entity.Email
-import com.birth.fit.domain.user.domain.entity.User
-import com.birth.fit.domain.email.domain.repository.EmailRepository
-import com.birth.fit.domain.user.domain.repository.UserRepository
 import com.birth.fit.common.exception.error.*
 import com.birth.fit.common.s3.S3Service
 import com.birth.fit.common.util.AES256Util
 import com.birth.fit.common.util.JwtTokenProvider
+import com.birth.fit.domain.email.domain.entity.Email
+import com.birth.fit.domain.email.domain.repository.EmailRepository
+import com.birth.fit.domain.user.domain.entity.User
+import com.birth.fit.domain.user.domain.repository.UserRepository
 import com.birth.fit.domain.user.dto.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.io.File
 import java.util.*
 
 @Service
 class UserService(
-    @Value("\${image.upload.dir}")
-    private val imageDirPath: String,
     @Autowired private val s3Service: S3Service,
     @Autowired private val aes256Util: AES256Util,
     @Autowired private val userRepository: UserRepository,
