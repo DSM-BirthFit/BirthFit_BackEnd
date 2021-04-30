@@ -68,7 +68,7 @@ jobs:
 #       JWT_ACCESS: ${{ secrets.JWT_ACCESS }}
 #       JWT_REFRESH: ${{ secrets.JWT_REFRESH }}
 #       USER_SECRET: ${{ secrets.USER_SECRET }}
-      
+
 #     services:
 #       redis:
 #         image: redis
@@ -92,7 +92,7 @@ jobs:
 #       run: ./gradlew clean build -x test
       
 #     - name: Build Docker Image
-#       run: sudo docker build --tag birthfit .
+#       run: docker build --tag birthfit .
 
 #     - name: Upload to Registry
 #       uses: elgohr/Publish-Docker-Github-Action@master
