@@ -27,7 +27,7 @@ spring:
       mail.smtp.ssl.enable: true
 
   redis:
-     host: 127.0.0.1
+     host: ${REDIS_HOST}
      port: 6379
 
 cloud:
