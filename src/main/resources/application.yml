@@ -1,0 +1,57 @@
+server:
+  port: 8000
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_NAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true
+
+  redis:
+     host: 127.0.0.1
+     port: 6379
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS}
+      secretKey: ${AWS_SECRET}
+    s3:
+      bucket: ${S3_BUCKET}
+      region: ap-northeast-2
+      stack:
+        auto: false
+      credentials:
+        instanceProfile: true
+
+auth:
+  jwt:
+    secret: ${JWT_SECRET}
+    header: ${JWT_HEADER}
+    prefix: ${JWT_PREFIX}
+    exp:
+      access: ${JWT_ACCESS}
+      refresh: ${JWT_REFRESH}
+
+user:
+  secret:
+    key: ${USER_SECRET}
