@@ -9,6 +9,9 @@ spring:
     password: ${DB_PASSWORD}
 
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -24,8 +27,21 @@ spring:
       mail.smtp.ssl.enable: true
 
   redis:
-     host: 127.0.0.1
+     host: ${DOCKER_HOST}
      port: 6379
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS}
+      secretKey: ${AWS_SECRET}
+    s3:
+      bucket: ${S3_BUCKET}
+      region: ap-northeast-2
+      stack:
+        auto: false
+      credentials:
+        instanceProfile: true
 
 auth:
   jwt:
@@ -39,7 +55,3 @@ auth:
 user:
   secret:
     key: ${USER_SECRET}
-
-image:
-  upload:
-    dir: ${BIRTHFIT_DIR}

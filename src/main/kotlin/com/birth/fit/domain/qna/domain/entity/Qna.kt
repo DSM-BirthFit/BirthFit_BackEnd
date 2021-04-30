@@ -7,6 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "qna")
 class Qna(
+
     @Id
     @Column(name = "qna_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
