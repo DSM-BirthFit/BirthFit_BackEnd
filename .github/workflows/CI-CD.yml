@@ -16,6 +16,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
       MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
@@ -57,6 +58,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
       MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+      DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
