@@ -30,6 +30,9 @@ spring:
      host: ${REDIS_HOST}
      port: 6379
 
+swagger:
+  host: ${SWAGGER_HOST}
+
 cloud:
   aws:
     credentials:
