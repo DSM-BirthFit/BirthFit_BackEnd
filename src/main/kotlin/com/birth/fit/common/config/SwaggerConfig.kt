@@ -1,5 +1,6 @@
 package com.birth.fit.common.config
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
@@ -14,14 +15,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @Suppress("DEPRECATION")
 @Configuration
 @EnableSwagger2
-class SwaggerConfig {
+class SwaggerConfig(
+    @Value("\${swagger.host}")
+    private val swaggerHost: String
+) {
 
     @Bean
     fun productApi(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
             .useDefaultResponseMessages(false)
             .apiInfo(this.metaInfo())
-            .host("localhost:8080")
+            .host(swaggerHost)
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.birth.fit.domain"))
             .paths(PathSelectors.any())

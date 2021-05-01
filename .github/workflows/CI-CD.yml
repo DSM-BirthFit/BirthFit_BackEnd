@@ -20,6 +20,7 @@ jobs:
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      SWAGGER_HOST: ${{ secrets.SWAGGER_HOST }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
       JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
@@ -62,6 +63,7 @@ jobs:
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
       S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      SWAGGER_HOST: ${{ secrets.SWAGGER_HOST }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
       JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
