@@ -20,7 +20,8 @@ class ApiExceptionHandler {
     }
 
     @ExceptionHandler(
-        InvalidTokenException::class
+        InvalidTokenException::class,
+        PasswordNotSameException::class
     )
     fun requestFailedException(e: Exception): ResponseEntity<ErrorResponse> {
         return generateErrorResponse(HttpStatus.UNAUTHORIZED, e.message!!)
