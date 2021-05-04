@@ -104,7 +104,7 @@ class UserService(
         user?: throw UserNotFoundException("User not found.")
 
         if(user.userId != profileRequest.userId) user.userId = profileRequest.userId
-        if(profileRequest.password != null && user.password == profileRequest.password) {
+        if(profileRequest.password != null && aes256Util.aesDecode(user.password) == profileRequest.password) {
             throw PasswordSameException("The password are same before.")
         }
 
@@ -122,6 +122,20 @@ class UserService(
         }
 
         userRepository.save(user)
+    }
+
+    fun deleteUser(passwordRequest: PasswordRequest) {
+        val token: String? = jwtTokenProvider.getToken("Authorization")
+        if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
+
+        val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
+        user?: throw UserNotFoundException("User not found.")
+
+        if(aes256Util.aesDecode(user.password) != passwordRequest.password) {
+            throw PasswordNotSameException("비밀번호가 일치하지 않습니다.")
+        }
+        
+        userRepository.delete(user)
     }
 
     private fun tokenResponse(username: String): TokenResponse {

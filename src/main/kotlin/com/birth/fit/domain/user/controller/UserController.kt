@@ -47,4 +47,9 @@ class UserController(
     ) {
         userService.changeProfile(profileRequest)
     }
+
+    @DeleteMapping
+    fun deleteUser(@RequestBody @Validated passwordRequest: PasswordRequest) {
+        userService.deleteUser(passwordRequest)
+    }
 }
