@@ -33,7 +33,7 @@ class HelpService(
         val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
-        val helps: Page<Help> = helpRepository.findAll(pageable)
+        val helps: Page<Help> = helpRepository.findAllByOrderByIdDesc(pageable)
         val list: MutableList<HelpListResponse> = ArrayList()
 
         helps.forEach {
