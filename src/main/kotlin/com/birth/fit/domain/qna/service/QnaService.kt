@@ -1,19 +1,19 @@
 package com.birth.fit.domain.qna.service
 
-import com.birth.fit.domain.qna.domain.entity.Qna
-import com.birth.fit.domain.qna.domain.entity.QnaAnswer
-import com.birth.fit.domain.qna.domain.entity.QnaLike
-import com.birth.fit.domain.user.domain.entity.User
-import com.birth.fit.domain.qna.domain.repository.QnaAnswerRepository
-import com.birth.fit.domain.qna.domain.repository.QnaLikeRepository
-import com.birth.fit.domain.qna.domain.repository.QnaRepository
-import com.birth.fit.domain.user.domain.repository.UserRepository
 import com.birth.fit.common.exception.error.ContentNotFoundException
 import com.birth.fit.common.exception.error.ExpiredTokenException
 import com.birth.fit.common.exception.error.PostNotFoundException
 import com.birth.fit.common.exception.error.UserNotFoundException
 import com.birth.fit.common.util.JwtTokenProvider
+import com.birth.fit.domain.qna.domain.entity.Qna
+import com.birth.fit.domain.qna.domain.entity.QnaAnswer
+import com.birth.fit.domain.qna.domain.entity.QnaLike
+import com.birth.fit.domain.qna.domain.repository.QnaAnswerRepository
+import com.birth.fit.domain.qna.domain.repository.QnaLikeRepository
+import com.birth.fit.domain.qna.domain.repository.QnaRepository
 import com.birth.fit.domain.qna.dto.*
+import com.birth.fit.domain.user.domain.entity.User
+import com.birth.fit.domain.user.domain.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -36,7 +36,7 @@ class QnaService(
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
         user?: throw UserNotFoundException("User not found.")
 
-        val qnaList: Page<Qna> = qnaRepository.findAll(pageable)
+        val qnaList: Page<Qna> = qnaRepository.findAllByOrderByIdDesc(pageable)
         val list: MutableList<QnaListResponse> = ArrayList()
 
         qnaList.forEach {
