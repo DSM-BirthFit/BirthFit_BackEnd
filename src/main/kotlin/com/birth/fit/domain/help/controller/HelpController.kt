@@ -35,8 +35,8 @@ class HelpController(
 
     @PostMapping("/comment/{helpId}")
     fun writeComment(@PathVariable @Validated helpId: Int,
-                     @RequestBody @Validated helpCommentRequest: HelpCommentRequest) {
-        helpService.writeComment(helpId, helpCommentRequest)
+                     @RequestBody @Validated helpCommentRequest: HelpCommentRequest): Int {
+        return helpService.writeComment(helpId, helpCommentRequest)
     }
 
     @PutMapping("/{helpId}")

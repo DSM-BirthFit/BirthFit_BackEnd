@@ -107,7 +107,7 @@ class HelpService(
         )
     }
 
-    fun writeComment(helpId: Int, helpCommentRequest: HelpCommentRequest) {
+    fun writeComment(helpId: Int, helpCommentRequest: HelpCommentRequest): Int {
         val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -117,13 +117,15 @@ class HelpService(
         val help: Help? = helpRepository.findById(helpId)
         help?: throw PostNotFoundException("Post not Found")
 
-        helpCommentRepository.save(
+        val comment = helpCommentRepository.save(
             HelpComment(
                 userEmail = user.email,
                 helpId = helpId,
                 comment = helpCommentRequest.comment
             )
         )
+
+        return comment.commentId!!
     }
 
     fun updateHelp(helpId: Int, helpPostRequest: HelpPostRequest) {
