@@ -110,7 +110,7 @@ class QnaService(
         )
     }
 
-    fun writeAnswer(qnaId: Int, qnaAnswerRequest: QnaAnswerRequest): Int {
+    fun writeAnswer(qnaId: Int, qnaAnswerRequest: QnaAnswerRequest) {
         val token: String? = jwtTokenProvider.getToken("Authorization")
         if(!jwtTokenProvider.validateToken(token!!)) throw ExpiredTokenException("The token has expired.")
 
@@ -120,15 +120,13 @@ class QnaService(
         val qna: Qna? = qnaRepository.findById(qnaId)
         qna?: throw PostNotFoundException("Post not found.")
 
-        val answer = qnaAnswerRepository.save(
+        qnaAnswerRepository.save(
             QnaAnswer(
                 qnaId = qnaId,
                 userEmail = user.email,
                 answer = qnaAnswerRequest.answer
             )
         )
-
-        return answer.answerId!!
     }
 
     fun updateQna(qnaId: Int, qnaPostRequest: QnaPostRequest) {

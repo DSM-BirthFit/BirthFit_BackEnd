@@ -33,8 +33,8 @@ class QnaController(
 
     @PostMapping("/answer/{qnaId}")
     fun writeAnswer(@PathVariable @Validated qnaId: Int,
-                    @RequestBody @Validated qnaAnswerRequest: QnaAnswerRequest): Int {
-        return qnaService.writeAnswer(qnaId, qnaAnswerRequest)
+                    @RequestBody @Validated qnaAnswerRequest: QnaAnswerRequest) {
+        qnaService.writeAnswer(qnaId, qnaAnswerRequest)
     }
 
     @PutMapping("/{qnaId}")
