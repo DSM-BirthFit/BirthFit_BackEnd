@@ -103,21 +103,21 @@ class UserService(
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
         user?: throw UserNotFoundException("User not found.")
 
-        if(user.userId != profileRequest.userId) user.userId = profileRequest.userId
+        profileRequest.userId?.let { user.userId = profileRequest.userId }
         if(profileRequest.password != null && aes256Util.aesDecode(user.password) == profileRequest.password) {
             throw PasswordSameException("The password are same before.")
         }
 
         profileRequest.password?.let { user.password = aes256Util.aesEncode(profileRequest.password) }
 
-        profileRequest.image?.run {
+        profileRequest.image?.let { its ->
             val imageName: String = UUID.randomUUID().toString()
 
-            user.image?.let {
-                s3Service.delete(user.image)
+            user.image?.let { it ->
+                s3Service.delete(it)
             }
 
-            s3Service.upload(profileRequest.image, imageName);
+            s3Service.upload(its, imageName);
             user.image = imageName
         }
 
