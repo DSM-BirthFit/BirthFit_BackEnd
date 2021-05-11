@@ -19,7 +19,7 @@ jobs:
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
-      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
       SWAGGER_HOST: ${{ secrets.SWAGGER_HOST }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
@@ -62,7 +62,7 @@ jobs:
       REDIS_HOST: ${{ secrets.REDIS_HOST }}
       AWS_ACCESS: ${{ secrets.AWS_ACCESS }}
       AWS_SECRET: ${{ secrets.AWS_SECRET }}
-      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
       SWAGGER_HOST: ${{ secrets.SWAGGER_HOST }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_HEADER: ${{ secrets.JWT_HEADER }}
