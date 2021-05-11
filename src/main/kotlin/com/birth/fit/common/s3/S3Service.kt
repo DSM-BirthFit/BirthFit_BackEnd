@@ -2,6 +2,7 @@ package com.birth.fit.common.s3
 
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.model.CannedAccessControlList
+import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.util.IOUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,11 +22,13 @@ class S3Service(
 
     @Throws(IOException::class)
     fun upload(file: MultipartFile, fileName: String?) {
+        val objectMetadata = ObjectMetadata()
         val bytes: ByteArray = IOUtils.toByteArray(file.inputStream)
+        objectMetadata.contentLength = bytes.size.toLong()
         val byteArrayInputStream = ByteArrayInputStream(bytes)
-        
+
         s3Client.putObject(
-            PutObjectRequest(bucket, fileName, byteArrayInputStream, null)
+            PutObjectRequest(bucket, fileName, byteArrayInputStream, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead)
         )
     }
