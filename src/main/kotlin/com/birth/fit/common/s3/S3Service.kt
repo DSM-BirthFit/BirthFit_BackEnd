@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayInputStream
-import java.io.IOException
-
 
 @Component
 class S3Service(
@@ -20,15 +18,9 @@ class S3Service(
     @Autowired private val s3Client: AmazonS3
 ) {
 
-    @Throws(IOException::class)
-    fun upload(file: MultipartFile, fileName: String?) {
-        val objectMetadata = ObjectMetadata()
-        val bytes: ByteArray = IOUtils.toByteArray(file.inputStream)
-        objectMetadata.contentLength = bytes.size.toLong()
-        val byteArrayInputStream = ByteArrayInputStream(bytes)
-
+    fun upload(file: MultipartFile, fileName: String) {
         s3Client.putObject(
-            PutObjectRequest(bucket, fileName, byteArrayInputStream, objectMetadata)
+            PutObjectRequest(bucket, fileName, file.inputStream, null)
                 .withCannedAcl(CannedAccessControlList.PublicRead)
         )
     }
