@@ -19,10 +19,7 @@ class JwtInterceptor(
             true
         } else {
             val refreshToken: String? = request.getHeader("X-Refresh-Token")?.substring(7)
-            if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken))
-                true
-            else
-                throw ExpiredTokenException("토큰이 만료되었습니다.")
+            refreshToken != null && jwtTokenProvider.validateToken(refreshToken)
         }
     }
 }

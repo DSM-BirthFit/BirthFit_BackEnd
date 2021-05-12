@@ -1,5 +1,6 @@
 package com.birth.fit.common.util
 
+import com.birth.fit.common.exception.error.ExpiredTokenException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
@@ -92,6 +93,7 @@ class JwtTokenProvider(
     fun getToken(header: String): String? {
         val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
         val token = request.getHeader(header)
+        if(!this.validateToken(token.substring(7))) throw ExpiredTokenException("토큰이 만료되었습니다.")
         return token.substring(7)
     }
 }
