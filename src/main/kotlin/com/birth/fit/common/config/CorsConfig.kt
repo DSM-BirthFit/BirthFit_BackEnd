@@ -32,6 +32,7 @@ class CorsConfig(
             .excludePathPatterns("/user/login")
             .excludePathPatterns("/user/password")
             .excludePathPatterns("/email/**")
+            .excludePathPatterns("/image/**")
             .excludePathPatterns("/swagger-ui.html/**",
                 "/swagger**", "/favicon**", "/webjars**",
                 "/webjars/**","swagger-ui-**", "/v2/**",
