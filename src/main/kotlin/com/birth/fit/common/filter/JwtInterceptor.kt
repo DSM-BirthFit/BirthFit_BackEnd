@@ -1,5 +1,6 @@
 package com.birth.fit.common.filter
 
+import com.amazonaws.services.securitytoken.model.ExpiredTokenException
 import com.birth.fit.common.util.JwtTokenProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -18,7 +19,10 @@ class JwtInterceptor(
             true
         } else {
             val refreshToken: String? = request.getHeader("X-Refresh-Token")?.substring(7)
-            refreshToken != null && jwtTokenProvider.validateToken(refreshToken)
+            if(refreshToken != null && jwtTokenProvider.validateToken(refreshToken))
+                true
+            else
+                throw ExpiredTokenException("토큰이 만료되었습니다.")
         }
     }
 }
