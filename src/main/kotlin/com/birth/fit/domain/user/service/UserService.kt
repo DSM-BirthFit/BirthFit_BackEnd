@@ -104,11 +104,13 @@ class UserService(
         user?: throw UserNotFoundException("User not found.")
 
         profileRequest.userId?.let { user.userId = profileRequest.userId }
-        if(profileRequest.password != null && aes256Util.aesDecode(user.password) == profileRequest.password) {
+        if(profileRequest.password != "" && aes256Util.aesDecode(user.password) == profileRequest.password) {
             throw PasswordSameException("The password are same before.")
         }
 
-        profileRequest.password?.let { user.password = aes256Util.aesEncode(profileRequest.password) }
+        if(profileRequest.password != "") {
+            user.password = aes256Util.aesEncode(profileRequest.password!!)
+        }
 
         profileRequest.image?.let { its ->
             val imageName: String = UUID.randomUUID().toString()
