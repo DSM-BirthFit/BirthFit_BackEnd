@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile
 class ChangeProfileRequest(
     val userId: String?,
     val password: String?,
-    var image: MultipartFile?
+    val image: MultipartFile?
 )
