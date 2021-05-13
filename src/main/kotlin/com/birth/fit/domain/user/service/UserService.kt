@@ -103,7 +103,7 @@ class UserService(
         val user: User? = userRepository.findByEmail(jwtTokenProvider.getUsername(token))
         user?: throw UserNotFoundException("User not found.")
 
-        profileRequest.userId?.let { user.userId = profileRequest.userId }
+        profileRequest.userId?.let { user.userId = profileRequest.userId!! }
         if(profileRequest.password != "" && aes256Util.aesDecode(user.password) == profileRequest.password) {
             throw PasswordSameException("The password are same before.")
         }
