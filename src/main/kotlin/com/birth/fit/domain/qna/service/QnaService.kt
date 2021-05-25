@@ -83,6 +83,7 @@ class QnaService(
             answer = qnaAnswerRepository.findAllByQnaId(qnaId)?.map {
                 val writer: User = userRepository.findByEmail(it.userEmail)!!
                 QnaAnswerResponse(
+                    answerId = it.answerId!!,
                     userId = writer.userId,
                     userImage = writer.image,
                     answer = it.answer,
