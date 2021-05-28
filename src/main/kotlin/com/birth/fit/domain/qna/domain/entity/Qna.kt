@@ -31,10 +31,10 @@ class Qna(
     @Column(name = "like_count")
     internal var likeCount: Int = 0,
 
-    @OneToMany(mappedBy = "qnaId", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "qnaId", cascade = [(CascadeType.ALL)])
     private val answers: MutableList<QnaAnswer>? = null,
 
-    @OneToMany(mappedBy = "qnaId", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "qnaId", cascade = [(CascadeType.ALL)])
     private val likes: MutableList<QnaLike>? = null
 ) {
 

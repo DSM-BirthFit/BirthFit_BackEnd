@@ -31,10 +31,10 @@ class Help (
     @Column(name = "like_count")
     internal var likeCount: Int = 0,
 
-    @OneToMany(mappedBy = "helpId", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "helpId", cascade = [(CascadeType.ALL)])
     private val comments: MutableList<HelpComment>? = null,
 
-    @OneToMany(mappedBy = "helpId", cascade = [CascadeType.REMOVE])
+    @OneToMany(mappedBy = "helpId", cascade = [(CascadeType.ALL)])
     private val likes: MutableList<HelpLike>? = null
 ) {
 
