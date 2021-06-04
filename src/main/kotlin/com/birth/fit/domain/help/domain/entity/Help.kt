@@ -1,6 +1,7 @@
 package com.birth.fit.domain.help.domain.entity
 
 import com.birth.fit.domain.help.dto.HelpPostRequest
+import com.birth.fit.domain.user.domain.entity.User
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -12,9 +13,6 @@ class Help (
     @Column(name = "help_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     internal var id: Int? = null,
-
-    @Column(name = "user_email")
-    internal val userEmail: String,
 
     @Column(name = "title")
     internal var title: String,
@@ -31,10 +29,14 @@ class Help (
     @Column(name = "like_count")
     internal var likeCount: Int = 0,
 
-    @OneToMany(mappedBy = "helpId", cascade = [(CascadeType.ALL)])
+    @ManyToOne
+    @JoinColumn(name = "userEmail", nullable = false, insertable = false, updatable = false)
+    internal val user: User,
+
+    @OneToMany(mappedBy = "help", cascade = [(CascadeType.ALL)])
     private val comments: MutableList<HelpComment>? = null,
 
-    @OneToMany(mappedBy = "helpId", cascade = [(CascadeType.ALL)])
+    @OneToMany(mappedBy = "help", cascade = [(CascadeType.ALL)])
     private val likes: MutableList<HelpLike>? = null
 ) {
 

@@ -1,6 +1,7 @@
 package com.birth.fit.domain.qna.domain.entity
 
 import com.birth.fit.domain.qna.dto.QnaPostRequest
+import com.birth.fit.domain.user.domain.entity.User
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -12,9 +13,6 @@ class Qna(
     @Column(name = "qna_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     internal val id: Int? = null,
-
-    @Column(name = "user_email")
-    internal val userEmail: String,
 
     @Column(name = "title")
     internal var title: String,
@@ -31,10 +29,14 @@ class Qna(
     @Column(name = "like_count")
     internal var likeCount: Int = 0,
 
-    @OneToMany(mappedBy = "qnaId", cascade = [(CascadeType.ALL)])
+    @ManyToOne
+    @JoinColumn(name = "userEmail", nullable = false, insertable = false, updatable = false)
+    internal val user: User,
+
+    @OneToMany(mappedBy = "qna", cascade = [(CascadeType.ALL)])
     private val answers: MutableList<QnaAnswer>? = null,
 
-    @OneToMany(mappedBy = "qnaId", cascade = [(CascadeType.ALL)])
+    @OneToMany(mappedBy = "qna", cascade = [(CascadeType.ALL)])
     private val likes: MutableList<QnaLike>? = null
 ) {
 
