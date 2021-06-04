@@ -1,11 +1,12 @@
 package com.birth.fit.domain.help.domain.entity
 
+import com.birth.fit.domain.user.domain.entity.User
 import java.io.Serializable
 
 class HelpLikePK(
 
-    private var userEmail: String = "",
-    private var helpId: Int = 0
+    private var help: Help,
+    private var user: User
 ): Serializable {
     private val serialVersionUID: Long = 1L
 
@@ -15,15 +16,15 @@ class HelpLikePK(
 
         other as HelpLikePK
 
-        if (userEmail != other.userEmail) return false
-        if (helpId != other.helpId) return false
+        if (help.id != other.help.id) return false
+        if (user.email != other.user.email) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = userEmail.hashCode()
-        result = 31 * result + helpId
+        var result = user.email.hashCode()
+        result = 31 * result + help.id!!
         return result
     }
 }
