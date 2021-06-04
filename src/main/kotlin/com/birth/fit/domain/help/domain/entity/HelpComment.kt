@@ -1,9 +1,7 @@
 package com.birth.fit.domain.help.domain.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import com.birth.fit.domain.user.domain.entity.User
+import javax.persistence.*
 
 @Entity
 class HelpComment(
@@ -11,9 +9,15 @@ class HelpComment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     internal val commentId: Int? = null,
-    internal val helpId: Int,
-    internal val userEmail: String,
-    internal var comment: String
+    internal var comment: String,
+
+    @ManyToOne
+    @JoinColumn(name = "help_id", nullable = false)
+    internal val help: Help,
+
+    @ManyToOne
+    @JoinColumn(name = "userEmail", nullable = false)
+    internal val user: User
 ) {
     fun updateComment(comment: String): HelpComment {
         this.comment = comment
