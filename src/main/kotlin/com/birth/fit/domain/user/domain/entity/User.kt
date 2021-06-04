@@ -25,21 +25,21 @@ class User(
     @Column(name = "image")
     internal var image: String? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val help: MutableList<Help>? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val helpLike: MutableList<HelpLike>? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val comment: MutableList<HelpComment>? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val qna: MutableList<Qna>? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val qnaLike: MutableList<QnaLike>? = null,
 
-    @OneToMany(mappedBy = "userEmail")
+    @OneToMany(mappedBy = "user")
     private val answer: MutableList<QnaAnswer>? = null
 )
