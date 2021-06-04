@@ -1,11 +1,12 @@
 package com.birth.fit.domain.qna.domain.entity
 
+import com.birth.fit.domain.user.domain.entity.User
 import java.io.Serializable
 
 class QnaLikePK(
 
-    private var userEmail: String = "",
-    private var qnaId: Int = 0
+    private var qna: Qna,
+    private var user: User
 ): Serializable {
     private val serialVersionUID: Long = 1L
 
@@ -15,16 +16,16 @@ class QnaLikePK(
 
         other as QnaLikePK
 
-        if (userEmail != other.userEmail) return false
-        if (qnaId != other.qnaId) return false
+        if (qna.id != other.qna.id) return false
+        if (user.email != other.user.email) return false
         if (serialVersionUID != other.serialVersionUID) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = userEmail.hashCode()
-        result = 31 * result + qnaId
+        var result = user.email.hashCode()
+        result = 31 * result + qna.id!!
         result = 31 * result + serialVersionUID.hashCode()
         return result
     }
