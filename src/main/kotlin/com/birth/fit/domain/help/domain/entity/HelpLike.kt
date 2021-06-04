@@ -1,19 +1,22 @@
 package com.birth.fit.domain.help.domain.entity
 
+import com.birth.fit.domain.user.domain.entity.User
 import java.io.Serializable
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.IdClass
+import javax.persistence.*
 
 @Entity
 @IdClass(HelpLikePK::class)
 class HelpLike(
 
     @Id
-    internal val userEmail: String,
+    @ManyToOne
+    @JoinColumn(name = "help_id", nullable = false)
+    private val help: Help,
 
     @Id
-    internal val helpId: Int
+    @ManyToOne
+    @JoinColumn(name = "userEmail", nullable = false)
+    private val user: User,
 ): Serializable {
     private val serialVersionUID: Long = 1L
 }
