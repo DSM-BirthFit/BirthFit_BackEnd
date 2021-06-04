@@ -67,7 +67,7 @@ class QnaService(
         val qna: Qna? = qnaRepository.findById(qnaId)
         qna?: throw PostNotFoundException("Post not Found")
 
-        val author: User = userRepository.findByEmail(qna.userEmail)!!
+        val author: User = userRepository.findByEmail(qna.user.email)!!
 
         qnaRepository.save(qna.view())
         return QnaContentResponse(
@@ -81,7 +81,7 @@ class QnaService(
             isMine = user.email == author.email,
             isLike = qnaLikeRepository.findByUserEmailAndQnaId(user.email, qnaId)?.isPresent == true,
             answer = qnaAnswerRepository.findAllByQnaId(qnaId)?.map {
-                val writer: User = userRepository.findByEmail(it.userEmail)!!
+                val writer: User = userRepository.findByEmail(it.user.email)!!
                 QnaAnswerResponse(
                     answerId = it.answerId!!,
                     userId = writer.userId,
@@ -102,7 +102,7 @@ class QnaService(
 
         qnaRepository.save(
             Qna(
-                userEmail = user.email,
+                user = user,
                 title = qnaPostRequest.title,
                 content = qnaPostRequest.content,
                 createdAt = LocalDate.now()
@@ -122,8 +122,8 @@ class QnaService(
 
         qnaAnswerRepository.save(
             QnaAnswer(
-                qnaId = qnaId,
-                userEmail = user.email,
+                qna = qna,
+                user = user,
                 answer = qnaAnswerRequest.answer
             )
         )
@@ -156,8 +156,8 @@ class QnaService(
         if(like == null) {
             qnaLikeRepository.save(
                 QnaLike(
-                    userEmail = user.email,
-                    qnaId = qnaId
+                    qna = qna,
+                    user = user
                 )
             )
             qnaRepository.save(qna.like())

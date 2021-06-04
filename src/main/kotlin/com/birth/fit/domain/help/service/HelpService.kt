@@ -64,7 +64,7 @@ class HelpService(
         val help: Help? = helpRepository.findById(helpId)
         help?: throw PostNotFoundException("Post not Found")
 
-        val author: User = userRepository.findByEmail(help.userEmail)!!
+        val author: User = userRepository.findByEmail(help.user.email)!!
 
         helpRepository.save(help.view())
         return HelpContentResponse(
@@ -78,7 +78,7 @@ class HelpService(
             isMine = user.email == author.email,
             isLike = helpLikeRepository.findByUserEmailAndHelpId(user.email, helpId)?.isPresent == true,
             comment = helpCommentRepository.findAllByHelpId(helpId)?.map {
-                    val writer: User = userRepository.findByEmail(it.userEmail)!!
+                    val writer: User = userRepository.findByEmail(it.user.email)!!
                     HelpCommentResponse(
                         commentId = it.commentId!!,
                         userId = writer.userId,
@@ -99,7 +99,7 @@ class HelpService(
 
         helpRepository.save(
             Help(
-                userEmail = user.email,
+                user = user,
                 title = helpPostRequest.title,
                 content = helpPostRequest.content,
                 createdAt = LocalDate.now()
@@ -119,8 +119,8 @@ class HelpService(
 
         helpCommentRepository.save(
             HelpComment(
-                userEmail = user.email,
-                helpId = helpId,
+                help = help,
+                user = user,
                 comment = helpCommentRequest.comment
             )
         )
@@ -153,8 +153,8 @@ class HelpService(
         if(like == null) {
             helpLikeRepository.save(
                 HelpLike(
-                    userEmail = user.email,
-                    helpId = helpId
+                    help = help,
+                    user = user
                 )
             )
             helpRepository.save(help.like())
